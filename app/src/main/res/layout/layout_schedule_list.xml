@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:sothree="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.sothree.slidinguppanel.SlidingUpPanelLayout
+        android:id="@+id/sliding_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="bottom"
+        sothree:umanoPanelHeight="68dp"
+        sothree:umanoShadowHeight="4dp"
+        sothree:umanoParallaxOffset="300dp"
+        sothree:umanoDragView="@+id/dragView"
+        sothree:umanoOverlay="true"
+        android:isScrollContainer="true"
+        sothree:umanoScrollableView="@+id/schedule_list">
+
+        <!-- MAIN CONTENT -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <!-- <com.google.android.gms.maps.MapView
+                 android:id="@+id/bus_map"
+                 android:layout_width="match_parent"
+                 android:layout_height="match_parent" />-->
+            <fragment
+                android:id="@+id/scheduleMapFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentBottom="true"
+                class="com.kanthan.teqbuzz.utilities.MySupportFragment" />
+
+            <ImageView
+                android:id="@+id/btn_picker"
+                android:layout_width="@dimen/map_button_size"
+                android:layout_height="@dimen/map_button_size"
+                android:src="@drawable/map_picker"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true" />
+
+            <ImageView
+                android:id="@+id/btn_gps"
+                android:layout_width="@dimen/map_button_size"
+                android:layout_height="@dimen/map_button_size"
+                android:src="@drawable/map_gps"
+                android:layout_alignParentTop="true"
+                android:layout_toLeftOf="@+id/btn_picker"
+                android:layout_toStartOf="@+id/btn_picker" />
+
+            <ImageView
+                android:id="@+id/btn_home"
+                android:layout_width="@dimen/map_button_size"
+                android:layout_height="@dimen/map_button_size"
+                android:src="@drawable/map_home"
+                android:layout_alignParentTop="true"
+                android:layout_toLeftOf="@+id/btn_gps"
+                android:layout_toStartOf="@+id/btn_gps"
+                android:visibility="gone" />
+
+            <ImageView
+                android:id="@+id/btn_work"
+                android:layout_width="@dimen/map_button_size"
+                android:layout_height="@dimen/map_button_size"
+                android:src="@drawable/map_work"
+                android:layout_alignParentTop="true"
+                android:layout_toLeftOf="@+id/btn_home"
+                android:layout_toStartOf="@+id/btn_home"
+                android:visibility="gone" />
+
+            <ImageView
+                android:layout_width="@dimen/center_marker_size"
+                android:layout_height="@dimen/center_marker_size"
+                android:layout_centerInParent="true"
+                android:src="@drawable/circle_blue" />
+
+
+        </RelativeLayout>
+
+        <!-- SLIDING LAYOUT -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:layout_weight="1">
+
+            <com.rey.material.widget.ProgressView
+                android:id="@+id/progressView"
+                android:layout_width="@dimen/button_size"
+                android:layout_height="@dimen/button_size"
+                app:pv_autostart="true"
+                android:layout_centerInParent="true"
+                app:pv_circular="true"
+                app:pv_progressStyle="@style/CircularProgress"
+                android:visibility="gone"
+                app:pv_progressMode="indeterminate" />
+
+            <TextView
+                android:id="@+id/vehicle_not_found"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="@string/no_vehicle_found"
+                android:textColor="@color/black"
+                android:textSize="@dimen/btn_text_size"
+                android:visibility="gone" />
+
+            <ListView
+                android:id="@+id/schedule_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:dividerHeight="0dp"
+                android:divider="@color/transparent">
+
+            </ListView>
+
+
+        </RelativeLayout>
+    </com.sothree.slidinguppanel.SlidingUpPanelLayout>
+
+</LinearLayout>

@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:materialdesign="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:clickable="true"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="false">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clickable="true"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <com.rey.material.widget.ProgressView
+                android:id="@+id/progressView"
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:visibility="gone"
+                app:pv_autostart="true"
+                app:pv_circular="false"
+                app:pv_progressMode="indeterminate"
+                app:pv_progressStyle="@style/LinearProgress" />
+
+            <com.rey.material.widget.ProgressView
+                android:id="@+id/googleProgressView"
+                android:layout_width="@dimen/button_size"
+                android:layout_height="@dimen/button_size"
+                android:visibility="gone"
+                app:pv_autostart="true"
+                app:pv_circular="true"
+                app:pv_progressMode="indeterminate"
+                app:pv_progressStyle="@style/CircularProgress" />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/text_field_padding"
+                android:layout_marginRight="@dimen/text_field_padding"
+                android:clickable="true"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="150dp"
+                    android:layout_height="100dp"
+                    android:layout_marginTop="@dimen/activity_horizontal_margin"
+                    android:src="@drawable/logo" />
+
+                <com.rengwuxian.materialedittext.MaterialEditText
+                    android:id="@+id/username"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableRight="@drawable/mail_box"
+                    android:hint="@string/enter_mail_id"
+                    android:singleLine="true"
+                    app:met_baseColor="@color/colorPrimary"
+                    app:met_errorColor="@color/red"
+                    app:met_floatingLabel="highlight"
+                    app:met_floatingLabelTextColor="#8805ad"
+                    app:met_helperTextColor="@color/colorPrimary"
+                    app:met_primaryColor="@color/colorPrimary"
+                    app:met_textColor="@color/black"
+                    app:met_textColorHint="@color/grey"
+                    app:met_underlineColor="@color/grey" />
+
+
+                <com.rengwuxian.materialedittext.MaterialEditText
+                    android:id="@+id/password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/text_field_margin"
+                    android:layout_marginTop="@dimen/text_field_margin"
+                    android:drawableRight="@drawable/key"
+                    android:hint="@string/enter_password"
+                    android:inputType="textPassword"
+                    android:singleLine="true"
+                    app:met_baseColor="#007688"
+                    app:met_errorColor="@color/red"
+                    app:met_floatingLabel="highlight"
+                    app:met_floatingLabelTextColor="#8805ad"
+                    app:met_helperTextColor="@color/colorPrimary"
+                    app:met_primaryColor="@color/colorPrimary"
+                    app:met_textColor="@color/black"
+                    app:met_textColorHint="@color/grey"
+                    app:met_underlineColor="@color/grey" />
+
+                <TextView
+                    android:id="@+id/tv_ForgotPwd"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:gravity="left"
+                    android:text="@string/forget_pwd"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textSize="12sp"
+                    android:textStyle="italic" />
+
+
+            </LinearLayout>
+
+
+            <!-- <com.gc.materialdesign.views.ButtonFloat
+                 android:id="@+id/login"
+                 android:layout_width="@dimen/button_size"
+                 materialdesign:iconDrawable="@drawable/tick_white"
+                 android:layout_height="@dimen/button_size"
+                 android:layout_marginTop="-25dp"
+                 android:background="@color/colorPrimary" />-->
+
+            <com.rey.material.widget.Button
+                android:id="@+id/login"
+                android:layout_width="200dp"
+                android:layout_height="40dp"
+                android:layout_marginBottom="@dimen/text_field_margin"
+                android:layout_marginTop="@dimen/text_field_padding"
+                android:background="@color/colorPrimary"
+                android:gravity="center"
+                android:shadowColor="@color/grey"
+                android:shadowRadius="15"
+                android:text="@string/signin"
+                android:textColor="@color/white"
+                android:visibility="visible">
+
+            </com.rey.material.widget.Button>
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/or"
+                android:textColor="@color/grey"
+                android:textStyle="italic" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/sign_in_with"
+                android:textColor="@color/grey"
+                android:textStyle="italic" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                android:padding="@dimen/text_field_padding">
+
+                <com.rey.material.widget.Button
+                    android:id="@+id/google_login"
+                    android:layout_width="200dp"
+                    android:layout_height="40dp"
+                    android:background="@drawable/google_login" />
+
+                <com.rey.material.widget.Button
+                    android:id="@+id/fb_login"
+                    android:layout_width="200dp"
+                    android:layout_height="40dp"
+                    android:layout_marginBottom="2dp"
+                    android:layout_marginTop="@dimen/text_field_padding"
+                    android:background="@drawable/fb_login" />
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+
+    </ScrollView>
+
+    <include layout="@layout/layout_progress" />
+</LinearLayout>

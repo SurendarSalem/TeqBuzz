@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "552200766764",
+    "firebase_url": "https://teqbuzz-1245.firebaseio.com",
+    "project_id": "teqbuzz-1245",
+    "storage_bucket": "teqbuzz-1245.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:552200766764:android:9df67b14519cade8",
+        "android_client_info": {
+          "package_name": "com.kanthan.teqbuzz"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "552200766764-hnn08uvc3sp8rdi949equ117rvght8va.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.kanthan.teqbuzz",
+            "certificate_hash": "ef22ed978fb803af0b8c9fc56cefd5009f1cccbf"
+          }
+        },
+        {
+          "client_id": "552200766764-p3pq6pf2aigg12ukn3a61g6men7ggo16.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB3kUMYz5WJgKKyZCaOmwhfq52aiVuA2XI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "552200766764-p3pq6pf2aigg12ukn3a61g6men7ggo16.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

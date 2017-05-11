@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@android:style/Widget.ActionButton"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:background="@color/colorPrimary"
+    android:clickable="true"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/badge_layout1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="false">
+
+        <RelativeLayout
+            android:id="@+id/relative_layout_item_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/button1"
+                android:layout_width="24dip"
+                android:layout_height="24dip"
+                android:background="@drawable/bus_white"
+                android:clickable="false" />
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/badge_count"
+        android:layout_width="20dip"
+        android:layout_height="20dip"
+        android:layout_marginLeft="10dip"
+        android:layout_marginTop="-10dip"
+        android:background="@android:drawable/ic_notification_overlay"
+        android:clickable="false"
+        android:gravity="center"
+        android:text="25"
+        android:textColor="#FFF"
+        android:textSize="10sp"
+        android:textStyle="bold" />
+</RelativeLayout>

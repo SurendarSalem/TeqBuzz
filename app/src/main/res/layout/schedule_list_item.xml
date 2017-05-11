@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/indicator"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentLeft="true"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <View
+            android:id="@+id/reach_above"
+            android:layout_width="1dp"
+            android:layout_height="17dp"
+            android:background="@color/black" />
+
+        <View
+            android:id="@+id/reach_point"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:background="@drawable/green_circle" />
+
+        <View
+            android:id="@+id/reach_below"
+            android:layout_width="1dp"
+            android:layout_height="17dp"
+            android:background="@color/black" />
+
+    </LinearLayout>
+
+
+    <ImageView
+        android:id="@+id/bell_img"
+        android:layout_width="@dimen/small_button_size"
+        android:layout_height="@dimen/small_button_size"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="@dimen/medium_padding"
+        android:padding="5dp"
+        android:src="@drawable/bell_active" />
+
+    <TextView
+        android:id="@+id/arrival_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/stop_name"
+        android:layout_marginTop="5dp"
+        android:layout_toEndOf="@+id/indicator"
+        android:layout_toRightOf="@+id/indicator"
+        android:background="@drawable/arrival_time_bg"
+        android:gravity="center"
+        android:padding="2dp"
+        android:text="9:30"
+        android:textColor="@color/white"
+        android:textSize="@dimen/time_text_size" />
+
+    <TextView
+        android:id="@+id/stop_name"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="@dimen/bottom_ellipsis_height"
+        android:layout_toLeftOf="@+id/bell_img"
+        android:layout_toRightOf="@+id/indicator"
+        android:gravity="start"
+        android:singleLine="true"
+        android:text="Stop name"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/black"
+        android:textSize="@dimen/stop_name_text_size" />
+
+    <TextView
+        android:id="@+id/departure_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/stop_name"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="5dp"
+        android:layout_toEndOf="@+id/arrival_time"
+        android:layout_toRightOf="@+id/arrival_time"
+        android:background="@drawable/departure_time_bg"
+        android:gravity="center"
+        android:padding="2dp"
+        android:text="9:40"
+        android:textColor="@color/white"
+        android:textSize="@dimen/time_text_size" />
+
+    <TextView
+        android:id="@+id/eta"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/departure_time"
+        android:layout_alignBottom="@+id/departure_time"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_toEndOf="@+id/departure_time"
+        android:layout_toRightOf="@+id/departure_time"
+        android:background="@drawable/eta_time_bg"
+        android:gravity="center"
+        android:padding="2dp"
+        android:text="50 mins"
+        android:textColor="@color/white"
+        android:textSize="@dimen/time_text_size" />
+
+
+</RelativeLayout>
+

@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:materialdesign="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:clickable="true"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <com.rey.material.widget.ProgressView
+        android:id="@+id/progressView"
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:visibility="gone"
+        app:pv_autostart="true"
+        app:pv_circular="false"
+        app:pv_progressMode="indeterminate"
+        app:pv_progressStyle="@style/LinearProgress" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clickable="true"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/text_field_padding"
+                android:clickable="true"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                android:padding="@dimen/activity_horizontal_margin">
+
+                <ImageView
+                    android:layout_width="150dp"
+                    android:layout_height="100dp"
+                    android:layout_marginTop="@dimen/activity_horizontal_margin"
+                    android:src="@drawable/logo" />
+
+                <com.rengwuxian.materialedittext.MaterialEditText
+                    android:id="@+id/name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/text_field_margin"
+                    android:drawableRight="@drawable/profile"
+                    android:hint="@string/enter_name"
+                    android:singleLine="true"
+                    app:met_baseColor="#007688"
+                    app:met_errorColor="@color/red"
+                    app:met_floatingLabel="highlight"
+                    app:met_floatingLabelTextColor="#8805ad"
+                    app:met_helperTextColor="@color/colorPrimary"
+                    app:met_primaryColor="@color/colorPrimary"
+                    app:met_textColor="@color/black"
+                    app:met_textColorHint="@color/grey"
+                    app:met_underlineColor="@color/grey" />
+
+                <com.rengwuxian.materialedittext.MaterialEditText
+                    android:id="@+id/username"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/text_field_margin"
+                    android:drawableRight="@drawable/mail_box"
+                    android:hint="@string/enter_mail_id"
+                    android:singleLine="true"
+                    app:met_baseColor="@color/colorPrimary"
+                    app:met_errorColor="@color/red"
+                    app:met_floatingLabel="highlight"
+                    app:met_floatingLabelTextColor="#8805ad"
+                    app:met_helperTextColor="@color/colorPrimary"
+                    app:met_primaryColor="@color/colorPrimary"
+                    app:met_textColor="@color/black"
+                    app:met_textColorHint="@color/grey"
+                    app:met_underlineColor="@color/grey" />
+
+
+                <com.rengwuxian.materialedittext.MaterialEditText
+                    android:id="@+id/password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/text_field_margin"
+                    android:layout_marginTop="@dimen/text_field_margin"
+                    android:drawableRight="@drawable/key"
+                    android:hint="@string/enter_password"
+                    android:inputType="textPassword"
+                    android:singleLine="true"
+                    app:met_baseColor="#007688"
+                    app:met_errorColor="@color/red"
+                    app:met_floatingLabel="highlight"
+                    app:met_floatingLabelTextColor="#8805ad"
+                    app:met_helperTextColor="@color/colorPrimary"
+                    app:met_primaryColor="@color/colorPrimary"
+                    app:met_textColor="@color/black"
+                    app:met_textColorHint="@color/grey"
+                    app:met_underlineColor="@color/grey" />
+
+
+                <com.rengwuxian.materialedittext.MaterialEditText
+                    android:id="@+id/confirm_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/text_field_margin"
+                    android:layout_marginTop="@dimen/text_field_margin"
+                    android:hint="@string/confirm_password"
+                    android:inputType="textPassword"
+                    android:singleLine="true"
+                    app:met_baseColor="#007688"
+                    app:met_errorColor="@color/red"
+                    app:met_floatingLabel="highlight"
+                    app:met_floatingLabelTextColor="#8805ad"
+                    app:met_helperTextColor="@color/colorPrimary"
+                    app:met_primaryColor="@color/colorPrimary"
+                    app:met_textColor="@color/black"
+                    app:met_textColorHint="@color/grey"
+                    app:met_underlineColor="@color/grey" />
+
+                <EditText
+                    android:id="@+id/txt_address"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/text_field_margin"
+                    android:layout_marginTop="@dimen/text_field_margin"
+                    android:background="@drawable/white_rounded_textview"
+                    android:gravity="top"
+                    android:hint="@string/enter_address"
+                    android:lines="3"
+                    android:padding="5dp"
+                    android:singleLine="false"
+                    android:textColorHint="@color/grey"
+                    android:visibility="gone" />
+
+
+                <com.rengwuxian.materialedittext.MaterialEditText
+                    android:id="@+id/phone_number"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/text_field_margin"
+                    android:layout_marginTop="@dimen/text_field_margin"
+                    android:hint="@string/enter_phone_number"
+                    android:inputType="number"
+                    android:singleLine="true"
+                    android:visibility="gone"
+                    app:met_baseColor="#007688"
+                    app:met_errorColor="@color/red"
+                    app:met_floatingLabel="highlight"
+                    app:met_floatingLabelTextColor="#8805ad"
+                    app:met_helperTextColor="@color/colorPrimary"
+                    app:met_primaryColor="@color/colorPrimary"
+                    app:met_textColor="@color/black"
+                    app:met_textColorHint="@color/grey"
+                    app:met_underlineColor="@color/grey" />
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/button_size"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginBottom="@dimen/location_text_field_margin"
+                    android:layout_marginTop="@dimen/location_text_field_margin"
+                    android:background="@drawable/border_shadow_black"
+                    android:orientation="horizontal"
+                    android:weightSum="6">
+
+                    <ImageView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:padding="10dp"
+                        android:src="@drawable/home_dark" />
+
+                    <com.rey.material.widget.TextView
+                        android:id="@+id/home_latitude"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:layout_margin="@dimen/location_text_field_margin"
+                        android:layout_weight="1.5"
+                        android:background="@drawable/orange_border"
+                        android:gravity="center"
+                        android:padding="5dp"
+                        android:singleLine="true"
+                        android:text="@string/latitude"
+                        android:textColor="@color/black"
+                        android:textSize="10sp" />
+
+                    <com.rey.material.widget.TextView
+                        android:id="@+id/home_longitude"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_margin="@dimen/location_text_field_margin"
+                        android:layout_weight="1.5"
+                        android:background="@drawable/orange_border"
+                        android:gravity="center"
+                        android:padding="5dp"
+                        android:singleLine="true"
+                        android:text="@string/longitude"
+                        android:textColor="@color/black"
+                        android:textSize="10sp" />
+
+
+                    <ImageView
+                        android:id="@+id/btn_gps"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@color/colorPrimary"
+                        android:padding="@dimen/location_text_field_margin"
+                        android:src="@drawable/map_gps"
+                        android:tint="@color/white" />
+
+                    <ImageView
+                        android:id="@+id/btn_picker"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="5dp"
+                        android:layout_weight="1"
+                        android:background="@color/colorPrimary"
+                        android:padding="@dimen/location_text_field_margin"
+                        android:src="@drawable/map_picker"
+                        android:tint="@color/white" />
+
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+
+            <!--  <com.gc.materialdesign.views.ButtonFloat
+                  android:id="@+id/signup"
+                  android:layout_width="@dimen/button_size"
+                  materialdesign:iconDrawable="@drawable/tick_white"
+                  android:layout_height="@dimen/button_size"
+                  android:layout_marginTop="-25dp"
+                  android:background="@color/colorPrimary" />-->
+
+
+            <com.rey.material.widget.Button
+                android:id="@+id/signup"
+                android:layout_width="150dp"
+                android:layout_height="40dp"
+                android:layout_marginBottom="@dimen/text_field_margin"
+                android:layout_marginTop="@dimen/text_field_padding"
+                android:background="@color/colorPrimary"
+                android:gravity="center"
+                android:paddingLeft="@dimen/text_field_padding"
+                android:paddingRight="@dimen/text_field_padding"
+                android:shadowColor="@color/grey"
+                android:shadowRadius="15"
+                android:text="@string/signup"
+                android:textColor="@color/white"
+                android:visibility="visible">
+
+            </com.rey.material.widget.Button>
+
+
+        </LinearLayout>
+    </ScrollView>
+
+    <include layout="@layout/layout_progress" />
+</LinearLayout>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="300dp"
+    android:layout_height="wrap_content"
+    android:background="@drawable/white_rounded_textview"
+    android:gravity="center_horizontal"
+    android:padding="@dimen/text_field_padding"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/text_field_padding"
+        android:layout_marginRight="@dimen/text_field_padding"
+        android:layout_marginTop="@dimen/text_field_padding"
+        android:textColor="@color/black"
+        android:textSize="16dp"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:text="@string/reset_pwd" />
+
+    <com.rey.material.widget.EditText
+        android:id="@+id/et_emailId"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/text_field_padding"
+        android:layout_marginRight="@dimen/text_field_padding"
+        android:layout_marginTop="@dimen/text_field_padding"
+        android:hint="@string/enter_mail_id" />
+
+    <com.rey.material.widget.Button
+        android:id="@+id/reset"
+        android:layout_width="200dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="@dimen/text_field_padding"
+        android:background="@color/colorPrimary"
+        android:gravity="center"
+        android:shadowColor="@color/grey"
+        android:shadowRadius="15"
+        android:text="@string/reset"
+        android:textColor="@color/white"
+        android:visibility="visible" />
+
+
+</LinearLayout>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+    <color name="colorPrimary">#45526e</color>
+    <color name="colorPrimaryDark">#6666ff</color>
+    <color name="transparent_black">#BF000000</color>
+    <color name="transparent_blue">#CC1976D2</color>
+
+
+    <color name="transparent">#00000000</color>
+    <color name="white">#ffffffff</color>
+    <color name="transparent_white">#80ffffff</color>
+    <color name="black">#4c4c4c</color>
+
+    <color name="grey">#717070</color>
+    <color name="light_grey">#f2ede8</color>
+    <color name="orange">#EF6C00</color>
+    <color name="red">#FFEE2121</color>
+    <color name="bulutcolor">#0000FF</color>
+
+    <!-- remove programatically color -->
+    <color name="app_green">#21BBA6</color>
+
+
+</resources>

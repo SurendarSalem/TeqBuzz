@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/button_size">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:padding="@dimen/activity_horizontal_margin"
+            android:text="@string/shared_vehicles"
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/medium_text_size" />
+
+        <ImageView
+            android:id="@+id/delete"
+            android:layout_width="@dimen/button_size"
+            android:layout_height="@dimen/button_size"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_margin="@dimen/margin_short"
+            android:padding="@dimen/margin_short"
+            android:src="@drawable/delete"
+            android:visibility="gone" />
+
+    </RelativeLayout>
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/header"
+        android:alpha="0.1"
+        android:background="@color/grey" />
+
+    <ListView
+        android:id="@+id/shared_bus_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/divider"
+        android:layout_marginBottom="@dimen/activity_horizontal_margin"
+        android:divider="@color/light_grey"
+        android:dividerHeight="1dp" />
+
+
+</RelativeLayout>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:weightSum="2">
+
+        <Button
+            android:id="@+id/cancel_btn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_margin="@dimen/activity_horizontal_margin"
+            android:layout_weight="2"
+            android:background="@drawable/rounded_button"
+            android:text="@string/cancel_alarm"
+            android:textColor="@color/white" />
+
+        <Button
+            android:id="@+id/snooze_btn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_margin="@dimen/activity_horizontal_margin"
+            android:layout_weight="1"
+            android:background="@drawable/rounded_button"
+            android:text="@string/snooze_alarm"
+            android:visibility="gone"
+            android:textColor="@color/white" />
+
+    </LinearLayout>
+
+    <com.gc.materialdesign.views.ProgressBarCircularIndeterminate
+        android:id="@+id/progress"
+        style="@style/AlarmProgress"
+        android:layout_width="180dp"
+        android:layout_height="180dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerInParent="true">
+
+    </com.gc.materialdesign.views.ProgressBarCircularIndeterminate>
+
+    <TextView
+        android:id="@+id/time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:gravity="center"
+        android:text="00:00"
+        android:textColor="@color/colorPrimary"
+        android:textSize="50sp" />
+
+</RelativeLayout>

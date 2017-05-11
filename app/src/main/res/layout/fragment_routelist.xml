@@ -1,0 +1,552 @@
+<!-- A DrawerLayout is intended to be used as the top-level content view using match_parent for both width and height to consume the full space available. -->
+<android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/swipe_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+
+    <android.support.v4.widget.DrawerLayout
+        android:id="@+id/drawer_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:clickable="true">
+
+
+        <!-- As the main content view, the view below consumes the entire
+             space available using match_parent in both dimensions. -->
+
+
+        <RelativeLayout
+            android:id="@+id/page_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:orientation="vertical">
+
+
+            <RelativeLayout
+                android:id="@+id/container_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clickable="true">
+
+                <LinearLayout
+                    android:id="@+id/back_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@+id/header"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
+
+
+                    <ProgressBar
+                        android:id="@+id/vehicleLoadingBar"
+                        android:layout_width="@dimen/button_size"
+                        android:layout_height="@dimen/button_size"
+                        android:layout_centerHorizontal="true" />
+
+                    <TextView
+                        android:id="@+id/vehicle_not_found"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:text="@string/vehicle_loading"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/btn_text_size"
+                        android:visibility="visible" />
+
+
+                </LinearLayout>
+
+
+                <ListView
+                    android:id="@+id/bus_listview"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:divider="@null"
+                    android:duplicateParentState="true" />
+
+                <LinearLayout
+                    android:id="@+id/header"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/bus_map_height"
+                    android:orientation="vertical">
+
+                    <RelativeLayout
+                        android:id="@+id/mapContainer"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <fragment
+                                android:id="@+id/vehicleMapFragment"
+                                class="com.kanthan.teqbuzz.utilities.MySupportFragment"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_alignParentBottom="true" />
+
+                        </LinearLayout>
+
+
+                        <ImageView
+                            android:layout_width="@dimen/center_marker_size"
+                            android:layout_height="@dimen/center_marker_size"
+                            android:layout_centerInParent="true"
+                            android:src="@drawable/circle_blue" />
+
+                    </RelativeLayout>
+
+
+                </LinearLayout>
+
+
+                <com.rey.material.widget.ProgressView
+                    android:id="@+id/progressView"
+                    android:layout_width="match_parent"
+                    android:layout_height="5dp"
+                    android:layout_marginTop="@dimen/bus_map_height"
+                    android:visibility="gone"
+                    app:pv_autostart="true"
+                    app:pv_circular="false"
+                    app:pv_progressMode="indeterminate"
+                    app:pv_progressStyle="@style/LinearProgress" />
+
+
+            </RelativeLayout>
+
+
+            <com.github.clans.fab.FloatingActionMenu
+                android:id="@+id/menu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                fab:menu_animationDelayPerItem="50"
+                fab:menu_backgroundColor="@android:color/transparent"
+                fab:menu_buttonSpacing="10dp"
+                fab:menu_colorNormal="@color/colorPrimary"
+                fab:menu_colorPressed="#444444"
+                fab:menu_colorRipple="#99FFFFFF"
+                fab:menu_fab_size="normal"
+                fab:menu_icon="@drawable/fab_add"
+                fab:menu_labels_colorNormal="#333333"
+                fab:menu_labels_colorPressed="#444444"
+                fab:menu_labels_colorRipple="#66FFFFFF"
+                fab:menu_labels_cornerRadius="3dp"
+                fab:menu_labels_ellipsize="none"
+                fab:menu_labels_hideAnimation="@anim/fab_slide_out_to_right"
+                fab:menu_labels_margin="0dp"
+                fab:menu_labels_maxLines="-1"
+                fab:menu_labels_padding="8dp"
+                fab:menu_labels_paddingBottom="4dp"
+                fab:menu_labels_paddingLeft="8dp"
+                fab:menu_labels_paddingRight="8dp"
+                fab:menu_labels_paddingTop="4dp"
+                fab:menu_labels_position="right"
+                fab:menu_labels_showAnimation="@anim/fab_slide_in_from_right"
+                fab:menu_labels_showShadow="true"
+                fab:menu_labels_singleLine="false"
+                fab:menu_labels_textColor="#FFFFFF"
+                fab:menu_labels_textSize="14sp"
+                fab:menu_openDirection="down"
+                fab:menu_shadowColor="#66000000"
+                fab:menu_shadowRadius="4dp"
+                fab:menu_shadowXOffset="1dp"
+                fab:menu_shadowYOffset="3dp"
+                fab:menu_showShadow="true">
+
+                <com.github.clans.fab.FloatingActionButton
+                    android:id="@+id/fab_gps"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:background="@color/transparent"
+                    android:src="@drawable/map_gps_24"
+                    ads:fab_colorNormal="@color/colorPrimary"
+                    ads:fab_colorPressed="@color/black"
+                    ads:fab_showShadow="false"
+                    app:fab_hideAnimation="@anim/fab_scale_down"
+                    app:fab_label=""
+                    app:fab_showAnimation="@anim/fab_scale_up"
+                    app:fab_size="mini" />
+
+
+                <com.github.clans.fab.FloatingActionButton
+                    android:id="@+id/fab_pick"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:background="@color/transparent"
+                    android:src="@drawable/map_picker_24"
+                    ads:fab_colorNormal="@color/colorPrimary"
+                    ads:fab_colorPressed="@color/black"
+                    ads:fab_showShadow="false"
+                    app:fab_hideAnimation="@anim/fab_scale_down"
+                    app:fab_label=""
+                    app:fab_showAnimation="@anim/fab_scale_up"
+                    app:fab_size="mini" />
+
+                <com.github.clans.fab.FloatingActionButton
+                    android:id="@+id/fab_home"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:background="@color/colorPrimary"
+                    android:src="@drawable/map_home_24"
+                    android:visibility="visible"
+                    ads:fab_colorNormal="@color/colorPrimary"
+                    ads:fab_colorPressed="@color/black"
+                    ads:fab_showShadow="false"
+                    app:fab_hideAnimation="@anim/fab_scale_down"
+                    app:fab_label=""
+                    app:fab_showAnimation="@anim/fab_scale_up"
+                    app:fab_size="mini" />
+
+                <com.github.clans.fab.FloatingActionButton
+                    android:id="@+id/fab_work"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:background="@color/colorPrimary"
+                    android:src="@drawable/map_office_24"
+                    android:visibility="visible"
+                    ads:fab_colorNormal="@color/colorPrimary"
+                    ads:fab_colorPressed="@color/black"
+                    ads:fab_showShadow="false"
+                    app:fab_hideAnimation="@anim/fab_scale_down"
+                    app:fab_label=""
+                    app:fab_showAnimation="@anim/fab_scale_up"
+                    app:fab_size="mini" />
+
+            </com.github.clans.fab.FloatingActionMenu>
+
+
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:id="@+id/stop_list_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:background="@color/white"
+            android:clickable="true"
+            android:visibility="visible"><!--temp-->
+
+
+            <LinearLayout
+                android:id="@+id/bus_detail_header"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimary"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+
+                    <com.github.siyamed.shapeimageview.CircularImageView
+                        android:id="@+id/stops_header_image"
+                        android:layout_width="@dimen/profile_image_size"
+                        android:layout_height="@dimen/profile_image_size"
+                        android:layout_centerVertical="true"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/bus"
+                        app:siBorderColor="@color/grey"
+                        app:siBorderWidth="2dp" />
+
+                    <LinearLayout
+                        android:id="@+id/stop_list_scroll"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_toRightOf="@+id/stops_header_image"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:weightSum="2">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="@dimen/textview_margin"
+                                android:layout_weight="1"
+                                android:text="@string/line_number"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/small_text_size" />
+
+                            <TextView
+                                android:id="@+id/line_number"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="@dimen/textview_margin"
+                                android:layout_weight="1"
+                                android:text="@string/line_number"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/small_text_size" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:weightSum="2">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="@dimen/textview_margin"
+                                android:layout_weight="1"
+                                android:text="@string/agency_name"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/small_text_size" />
+
+                            <TextView
+                                android:id="@+id/agency_name"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="@dimen/textview_margin"
+                                android:layout_weight="1"
+                                android:text="@string/agency_name"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/small_text_size" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:visibility="visible"
+                            android:weightSum="2">
+
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="@dimen/textview_margin"
+                                android:layout_weight="1"
+                                android:text="@string/start_location"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/small_text_size" />
+
+                            <TextView
+                                android:id="@+id/start_location"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="@dimen/textview_margin"
+                                android:layout_weight="1"
+                                android:text="@string/start_location"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/small_text_size" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:weightSum="2">
+
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="@dimen/textview_margin"
+                                android:layout_weight="1"
+                                android:text="@string/end_location"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/small_text_size" />
+
+
+                            <TextView
+                                android:id="@+id/end_location"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="@dimen/textview_margin"
+                                android:layout_weight="1"
+                                android:text="@string/end_location"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/small_text_size" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:weightSum="2">
+
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="@dimen/textview_margin"
+                                android:layout_weight="1"
+                                android:text="@string/vehicle_type"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/small_text_size" />
+
+
+                            <TextView
+                                android:id="@+id/vehicle_type"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="@dimen/textview_margin"
+                                android:layout_weight="1"
+                                android:text="@string/vehicle_type"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/small_text_size" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+
+                </RelativeLayout>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/progress_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+
+                <com.rey.material.widget.ProgressView
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/button_size"
+                    app:pv_autostart="true"
+                    app:pv_circular="true"
+                    app:pv_progressMode="indeterminate"
+                    app:pv_progressStyle="@style/CircularProgress" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/stops_loading"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/notification_subtext_size" />
+
+            </LinearLayout>
+
+            <ListView
+                android:id="@+id/stops_listview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_above="@+id/linearLayout"
+                android:layout_below="@+id/bus_detail_header"
+                android:layout_gravity="right"
+                android:choiceMode="singleChoice"
+                android:divider="@null"
+                android:dividerHeight="0dp"
+                android:scrollbars="none"
+                android:visibility="visible" />
+
+            <LinearLayout
+                android:id="@+id/linearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/button_size"
+                android:layout_alignParentBottom="true"
+                android:layout_marginTop="@dimen/margin_short"
+                android:orientation="horizontal">
+
+                <View
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_marginLeft="@dimen/margin_short"
+                    android:background="@color/transparent_blue" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/margin_short"
+                    android:text="@string/arrival_time"
+                    android:textColor="@color/transparent_blue"
+                    android:textSize="@dimen/stop_name_text_size" />
+
+                <View
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_marginLeft="@dimen/margin_short"
+                    android:background="@color/app_green"
+                    android:textSize="@dimen/stop_name_text_size" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/margin_short"
+                    android:text="@string/departure_time"
+                    android:textColor="@color/app_green"
+                    android:textSize="@dimen/stop_name_text_size" />
+
+            </LinearLayout>
+
+
+            <RelativeLayout
+                android:id="@+id/stop_overlay"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white"
+                android:visibility="visible">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:orientation="vertical">
+
+                    <ProgressBar
+                        android:id="@+id/stop_loading_bar"
+                        android:layout_width="@dimen/button_size"
+                        android:layout_height="@dimen/button_size"
+                        android:layout_gravity="center_horizontal"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:id="@+id/no_schedules_selected"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="@dimen/activity_horizontal_margin"
+                        android:text="@string/no_schedules_selected"
+                        android:textColor="@color/black" />
+
+                    <TextView
+                        android:id="@+id/stops_loading"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="@dimen/activity_horizontal_margin"
+                        android:text="@string/stops_loading"
+                        android:textColor="@color/black"
+                        android:visibility="gone" />
+
+                </LinearLayout>
+            </RelativeLayout>
+        </RelativeLayout>
+
+
+    </android.support.v4.widget.DrawerLayout>
+
+
+</android.support.v4.widget.SwipeRefreshLayout>

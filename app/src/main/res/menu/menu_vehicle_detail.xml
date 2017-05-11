@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <item
+        android:id="@+id/add_fav"
+        android:title="@string/add_fav"
+        android:icon="@drawable/fav_off_white"
+        android:orderInCategory="100"
+        app:showAsAction="always"
+        android:visible="false" />
+
+
+   <!-- <item
+        android:id="@+id/schedules"
+        android:title="@string/schedules"
+        android:icon="@drawable/bus_white"
+        android:orderInCategory="200"
+        app:showAsAction="always"
+        android:visible="true" />-->
+</menu>

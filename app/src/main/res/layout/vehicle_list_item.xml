@@ -1,0 +1,457 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/vehicle_list_container"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/bus_card"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:clickable="false"
+        ads:cardBackgroundColor="@color/colorPrimary"
+        ads:cardCornerRadius="4dp"
+        ads:cardElevation="5dp"
+        ads:cardUseCompatPadding="true">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="false"
+            android:duplicateParentState="true">
+
+
+            <ImageView
+                android:id="@+id/bus_icon"
+                android:layout_width="@dimen/button_size"
+                android:layout_height="@dimen/button_size"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:duplicateParentState="true"
+                android:src="@drawable/blue_bus"
+                android:visibility="gone" />
+
+
+            <RelativeLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:duplicateParentState="true"
+                android:orientation="vertical"
+                android:visibility="visible">
+
+                <RelativeLayout
+                    android:id="@+id/sub_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:duplicateParentState="true"
+                    android:orientation="horizontal">
+
+
+                    <RelativeLayout
+                        android:id="@+id/icon_container"
+                        android:layout_width="60dp"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentLeft="true"
+                        android:duplicateParentState="true">
+
+                        <ImageView
+                            android:id="@+id/vehicle_icon"
+                            android:layout_width="@dimen/vehicle_icon_size"
+                            android:layout_height="@dimen/vehicle_icon_size"
+                            android:layout_above="@+id/distance"
+                            android:layout_centerHorizontal="true"
+                            android:duplicateParentState="true"
+                            android:padding="10dp"
+                            android:scaleType="fitXY"
+                            android:src="@drawable/bus_white"
+                            android:visibility="visible" />
+
+                        <TextView
+                            android:id="@+id/vehicle_num"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_alignParentStart="true"
+                            android:duplicateParentState="true"
+                            android:gravity="center"
+                            android:padding="@dimen/inner_padding_right"
+                            android:singleLine="true"
+                            android:text="Bus no : 12 B"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/bus_num_text_size"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/distance"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentBottom="true"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_alignParentStart="true"
+                            android:duplicateParentState="true"
+                            android:gravity="center"
+                            android:padding="5dp"
+                            android:singleLine="true"
+                            android:text="4545 km"
+                            android:textAppearance="?android:attr/textAppearanceSmall"
+                            android:textColor="@color/white"
+                            android:textSize="10sp" />
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/relativeLayout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignLeft="@+id/bus_divider"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignStart="@+id/bus_divider"
+                        android:duplicateParentState="true"
+                        android:padding="10dp">
+
+                        <TextView
+                            android:id="@+id/now_stop"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignLeft="@+id/next_stop"
+                            android:layout_alignStart="@+id/next_stop"
+                            android:layout_alignTop="@+id/busDistance"
+                            android:layout_toLeftOf="@+id/busDistance"
+                            android:duplicateParentState="true"
+                            android:gravity="center_vertical"
+                            android:padding="@dimen/inner_padding_right"
+                            android:singleLine="true"
+                            android:text="Now in Bangalore"
+                            android:textColor="@color/white"
+                            android:textSize="12sp"
+                            android:visibility="visible" />
+
+
+                        <TextView
+                            android:id="@+id/next_stop"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignLeft="@+id/vertical_divider"
+                            android:layout_alignParentBottom="true"
+                            android:layout_alignStart="@+id/vertical_divider"
+                            android:duplicateParentState="true"
+                            android:gravity="center_vertical"
+                            android:singleLine="true"
+                            android:text="Next stop"
+                            android:textColor="@color/white"
+                            android:textSize="12sp" />
+
+                        <ImageView
+                            android:id="@+id/favIcon"
+                            android:layout_width="@dimen/fav_list_size"
+                            android:layout_height="@dimen/fav_list_size"
+                            android:layout_alignBottom="@+id/to_stop"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
+                            android:duplicateParentState="true"
+                            android:src="@drawable/favorite" />
+
+
+                        <TextView
+                            android:id="@+id/busDistance"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_above="@+id/next_stop"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
+                            android:duplicateParentState="true"
+                            android:gravity="center"
+                            android:text="0 km"
+                            android:textColor="@color/white" />
+
+                        <TextView
+                            android:id="@+id/from_stop"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentStart="true"
+                            android:layout_alignParentTop="true"
+                            android:duplicateParentState="true"
+                            android:gravity="center_vertical"
+                            android:text="From : Salem"
+                            android:textColor="@color/white"
+                            android:textSize="12sp" />
+
+                        <TextView
+                            android:id="@+id/to_stop"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentStart="true"
+                            android:layout_below="@+id/from_stop"
+                            android:duplicateParentState="true"
+                            android:gravity="center_vertical"
+                            android:padding="@dimen/inner_padding_right"
+                            android:text="To : Bangalore"
+                            android:textColor="@color/white"
+                            android:textSize="12sp"
+                            android:visibility="visible" />
+
+                        <View
+                            android:id="@+id/vertical_divider"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_centerVertical="true"
+                            android:layout_toLeftOf="@+id/favIcon"
+                            android:layout_toStartOf="@+id/favIcon"
+                            android:alpha="0.3"
+                            android:background="@color/white"
+                            android:duplicateParentState="true" />
+
+
+                    </RelativeLayout>
+
+
+                    <View
+                        android:id="@+id/bus_divider"
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:layout_centerVertical="true"
+                        android:layout_marginBottom="@dimen/medium_padding"
+                        android:layout_marginTop="@dimen/medium_padding"
+                        android:layout_toEndOf="@+id/icon_container"
+                        android:layout_toRightOf="@+id/icon_container"
+                        android:alpha="0.3"
+                        android:background="@color/white"
+                        android:duplicateParentState="true" />
+
+
+                </RelativeLayout>
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/click_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/clear_selected"
+                android:layout_width="@dimen/fav_list_size"
+                android:layout_height="@dimen/fav_list_size"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:clickable="true"
+                android:visibility="gone"
+                android:src="@drawable/tick_white" />
+
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/ad_card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/bus_card"
+        android:visibility="gone"
+        ads:cardBackgroundColor="@color/white"
+        ads:cardCornerRadius="4dp"
+        ads:cardElevation="5dp"
+        ads:cardUseCompatPadding="true">
+
+
+        <!--<RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/ad_cover_image"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_toEndOf="@+id/native_ad_icon"
+                android:layout_toRightOf="@+id/native_ad_icon"
+                android:scaleType="fitXY"
+                android:visibility="visible" />
+
+            <com.facebook.ads.MediaView
+                android:id="@+id/native_ad_media"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_toEndOf="@+id/native_ad_icon"
+                android:layout_toRightOf="@+id/native_ad_icon"
+                android:contentDescription="image_desc"
+                android:gravity="center"
+                android:visibility="gone" />
+
+            <ImageView
+                android:id="@+id/native_ad_icon"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:contentDescription="icon_desc"
+                android:scaleType="fitXY"
+                android:visibility="visible" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_toEndOf="@+id/native_ad_icon"
+                android:layout_toRightOf="@+id/native_ad_icon"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="@dimen/medium_padding"
+                        android:orientation="vertical"
+                        android:paddingLeft="5dp">
+
+                        <TextView
+                            android:id="@+id/native_ad_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ellipsize="end"
+                            android:textColor="@color/black"
+                            android:textSize="15sp" />
+
+                        <TextView
+                            android:id="@+id/native_ad_body"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ellipsize="end"
+                            android:lines="2"
+                            android:textColor="@color/black"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="5dp"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:id="@+id/native_ad_social_context"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="3.5"
+                        android:ellipsize="end"
+                        android:lines="2"
+                        android:paddingRight="5dp"
+                        android:textColor="@color/black"
+                        android:textSize="13sp" />
+
+                    <Button
+                        android:id="@+id/native_ad_call_to_action"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.5"
+                        android:background="@color/light_grey"
+                        android:gravity="center"
+                        android:padding="@dimen/medium_padding"
+                        android:textSize="13sp"
+                        android:visibility="gone" />
+                </LinearLayout>
+            </LinearLayout>
+        </RelativeLayout>-->
+        <LinearLayout
+            android:id="@+id/ad_unit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/white"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="10dp"
+                android:paddingTop="10dp">
+
+                <ImageView
+                    android:id="@+id/native_ad_icon"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingLeft="5dp">
+
+                    <TextView
+                        android:id="@+id/native_ad_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:lines="1"
+                        android:textColor="@android:color/black"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/native_ad_body"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:lines="2"
+                        android:textColor="@android:color/black"
+                        android:textSize="14sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <com.facebook.ads.MediaView
+                android:id="@+id/native_ad_media"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:visibility="gone" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="5dp">
+
+                <TextView
+                    android:id="@+id/native_ad_social_context"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="3"
+                    android:ellipsize="end"
+                    android:lines="2"
+                    android:paddingRight="5dp"
+                    android:textColor="@android:color/black"
+                    android:textSize="12sp" />
+
+                <Button
+                    android:id="@+id/native_ad_call_to_action"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:background="@color/app_green"
+                    android:gravity="center"
+                    android:textSize="14sp" />
+            </LinearLayout>
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+</RelativeLayout>

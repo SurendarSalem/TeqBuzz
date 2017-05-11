@@ -1,0 +1,165 @@
+<resources>
+    <string name="app_name">TeqBuzz</string>
+    <string name="action_settings">Settings</string>
+    <string name="gps_enable_settings">Do you want to enable GPS?</string>
+
+    <string name="action_example">Example action</string>
+    <string name="openDrawer">Open drawer</string>
+    <string name="closeDrawer">Close drawer</string>
+
+    <string name="Home">Home</string>
+    <string name="Login">Login</string>
+    <string name="My_Favourites">My Favourites</string>
+    <string name="Settings">Settings</string>
+    <string name="Help">Help/About</string>
+    <string name="Logout">Logout</string>
+    <string name="shared_buses">Shared Vehicles</string>
+    <string name="favourites">Favourites</string>
+
+
+    <string-array name="drawer_menu">
+        <item name="Home">Home</item>
+        <item name="Login">Login</item>
+        <item name="shared_buses">Shared Vehicles</item>
+        <item name="Settings">Settings</item>
+        <item name="Help">Help/About</item>
+        <item name="Logout">Logout</item>
+    </string-array>
+
+    <string-array name="vehicle_detail_titles">
+        <item name="Home">Details</item>
+        <item name="Home">Stations</item>
+    </string-array>
+
+    <string-array name="authentication_titles">
+        <item name="">Login</item>
+        <item name="">SignUp</item>
+    </string-array>
+
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="enter_username">Enter Username</string>
+    <string name="enter_password">Enter Password</string>
+    <string name="some_error_occured">Some error occurred</string>
+    <string name="signup">Sign Up</string>
+
+    <!--facebook-->
+    <string name="facebook_app_id">1112849102102984</string>
+    <string name="enter_name">Enter Name</string>
+    <string name="longitude">Longitude</string>
+    <string name="latitude">Latitude</string>
+    <string name="enter_address">Enter address</string>
+    <string name="enter_phone_number">Enter Phone Number</string>
+    <string name="server_unregister_error">Server Unregister Error</string>
+    <string name="server_unregistered">Server Registered</string>
+    <string name="user_already_exists">User already exists</string>
+    <string name="signup_successfully">Signup Successfully</string>
+    <string name="login_successfully">Login Successfully</string>
+    <string name="invalid_both">Invalid Username and Password</string>
+    <string name="line_number">Line Number</string>
+    <string name="vehicle_type">Vehicle Type</string>
+    <string name="end_location">End Station</string>
+    <string name="start_location">Start Station</string>
+    <string name="agency_name">Agency</string>
+    <string name="add_fav">Add</string>
+    <string name="location_select">Select your location using</string>
+    <string name="gps">GPS</string>
+    <string name="pick">Pick</string>
+    <string name="please_wait">Please wait ...</string>
+    <string name="fetching_location">Fetching location..</string>
+    <string name="no_internet">Not connected to internet</string>
+    <string name="location_not_found">Location not found. Please try again</string>
+    <string name="enter_mail_id">Enter email id</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="please_confirm_password">Please confirm password</string>
+    <string name="user_updated_success">User updated successfully</string>
+    <string name="user_updated_failed">User update failed</string>
+    <string name="no_vehicle_found">No Vehicle found</string>
+    <string name="fav">Fav</string>
+    <string name="all">All</string>
+    <string name="vehicle_details">Vehicle Details</string>
+
+    <!--Vehicle Optiond Dialog-->
+    <string name="show_route">Show route on map</string>
+    <string name="focus_vehicle">Move the map to Bus</string>
+    <string name="show_schedules">Show Schedules</string>
+    <string name="add_favourite">Add as Favourite</string>
+    <string name="share_vehicle">Share Vehicle</string>
+    <string name="shared_vehicles">Shared Vehicles</string>
+    <!--Vehicle Optiond Dialog-->
+
+    <!--removable string observable texts-->
+
+    <string name="or">or</string>
+    <string name="welcome_teqbuzz">Welcome to TeqBuzz</string>
+    <string name="stops_loading">Stops Loading</string>
+    <string name="transaction_limit_exceeded">Transaction limit exceeded</string>
+    <string name="vehicle_loading">Vehicles Loading</string>
+    <string name="stop_id">Stop Id</string>
+    <string name="stop_name">Stop Name</string>
+    <string name="bus_id">Bus id</string>
+    <string name="bus_number">Bus No.</string>
+    <string name="home_location">Home Location</string>
+    <string name="work_location">Work Location</string>
+    <string name="no_fav_vehicles">No Favourite Vehicles found</string>
+    <string name="cancel_alarm">Cancel</string>
+    <string name="snooze_alarm">Snooze</string>
+    <string name="login_dialog_msg">You need to login to select this location</string>
+    <string name="login">Login</string>
+    <string name="cancel">Cancel</string>
+    <string name="login_dialog_message_favourites">You need to login to see the Favourites</string>
+    <string name="signin">Sign in</string>
+    <string name="test_admob_app_id">ca-app-pub-4405966547814654~4810509923</string>
+    <string name="testDeviceID" />
+    <string name="test_admob_express_unit_id">ca-app-pub-4405966547814654/6287243120</string>
+    <string name="test_admob_unit_id">ca-app-pub-4405966547814654/6287243120</string>
+    <string name="arrival_time">Arrival Time</string>
+    <string name="departure_time">Departure Time</string>
+    <string name="sign_in_with">Sign in with</string>
+    <string name="update">Update</string>
+    <string name="forget_pwd">Forgot password?</string>
+    <string name="location_loading_message">Please wait. Location is loading</string>
+    <string name="distance">distance</string>
+    <string name="show">Show</string>
+    <string name="reset">Reset</string>
+    <string name="filter">Filter</string>
+    <string name="homeLocationDialogMsg">You need to set your home location in Settings page.</string>
+    <string name="workLocationDialogMsg">You need to set your work location in Settings page.</string>
+    <string name="set">Set</string>
+    <string name="destination">Destination</string>
+    <string name="no_schedules_selected">No Schedules selected</string>
+    <string name="stop_number">Stop number</string>
+    <string name="shared">Shared</string>
+    <string name="add_shared_vehicle_msg_login">Do you want to add this vehice in your shared list?</string>
+    <string name="add_shared_vehicle_msg_non_login">Do you want to add this vehicle in your shared list? If so, you need to login. Do you want to login?</string>
+    <string name="add">Add</string>
+    <string name="no_thanks">No Thanks</string>
+    <string name="delete">Delete</string>
+    <string name="share_vehicle_dialog_title">Shared Vehicles</string>
+    <string name="no_shared_vehicles">No shared vehicles found</string>
+    <string name="ok">ok</string>
+    <string name="shared_vehicle_added_message">Vehicle added to shared list succesfully</string>
+    <string name="retry">Retry</string>
+    <string name="please_wait_location_loading">Please wait. Location is loading..</string>
+    <string name="confirm_exit_app">Are you sure want to exit Teqbuzz?</string>
+    <string name="exit">Exit</string>
+    <string name="connect">Connect</string>
+    <string name="hyperlink"><![CDATA[Please visit www.teqbuzz.com for assistance]]></string>
+    <string name="teqbuzz_url">www.teqbuzz.com</string>
+    <string name="please_visit">Please visit \u0020</string>
+    <string name="for_assistance">\u0020 for assistance</string>
+    <string name="fav_added">Bus added to your Favourites</string>
+    <string name="fav_removed">Bus removed from  your Favourites</string>
+    <string name="reset_pwd">Reset Password</string>
+    <string name="password_reset">Your new password has been sent to your email</string>
+    <string-array name="options_array">
+        <item></item>
+    </string-array>
+    <string-array name="filter_array">
+        <item name="">All</item>
+        <item name="">Favourites</item>
+        <item name="">Shared</item>
+    </string-array>
+
+
+</resources>
