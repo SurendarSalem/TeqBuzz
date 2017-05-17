@@ -52,6 +52,7 @@ import java.io.InputStreamReader;
 import java.io.Serializable;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.DoubleBuffer;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
@@ -687,6 +688,14 @@ public class Utility {
         return flagBitmapDescriptor;
 
 
+    }
+
+    public static ArrayList<Vehicle> setDummyMovements(ArrayList<Vehicle> receivedVehicles, ArrayList<Vehicle> teqBuzzVehicles) {
+        for (int i = 0; i < receivedVehicles.size(); i++) {
+            receivedVehicles.get(i).setLatitude(String.valueOf(Double.parseDouble(teqBuzzVehicles.get(i).getLatitude()) + 0.0001));
+            receivedVehicles.get(i).setLongitude(String.valueOf(Double.parseDouble(teqBuzzVehicles.get(i).getLongitude()) + 0.0001));
+        }
+        return receivedVehicles;
     }
 }
 

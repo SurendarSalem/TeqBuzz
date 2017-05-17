@@ -45,6 +45,7 @@ public class Constants {
     public static String GET_MAP_PATH_URL = "https://maps.googleapis.com/maps/api/directions/json?";
     public static String debug_hash_key = "EF:22:ED:97:8F:B8:03:AF:0B:8C:9F:C5:6C:EF:D5:00:9F:1C:CC:BF";
     public static String release_hash_key = "85:2E:C7:EB:0B:FC:D3:72:2B:E3:91:D1:FE:A6:E4:73:5A:BC:29:4A";
+    //EF:22:ED:97:8F:B8:03:AF:0B:8C:9F:C5:6C:EF:D5:00:9F:1C:CC:BF
 // fb hash: 2jmj7l5rSw0yVb/vlWAYkK/YBwk=
     public interface GoogleAdMob {
         String APP_ID = "ca-app-pub-4405966547814654~4977576325";
@@ -67,3 +68,7 @@ public class Constants {
 
 
 }
+/*     http://tamsonic.de/phpmyadmin
+*      username : teqbuzz
+*      password :  teq_buss;1
+* */

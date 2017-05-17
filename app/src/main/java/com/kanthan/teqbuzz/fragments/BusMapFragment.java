@@ -153,7 +153,7 @@ public class BusMapFragment extends Fragment implements AdapterView.OnItemClickL
     private View rootView;
     // private MapView mMapView;
     private GoogleMap googleMap;
-    private ArrayList<Vehicle> vehicles;
+    private ArrayList<Vehicle> vehicles, mainTeqbuzzVehicles, mainFavTeqbuzzVehicles;
     private ArrayList<String> vehicleIds;
     Preferences myPreferences;
     Double double_latitude, double_longitude;
@@ -287,7 +287,11 @@ public class BusMapFragment extends Fragment implements AdapterView.OnItemClickL
     private boolean isMapFocusedRoute;
     private DownloadTask polyLinesDownloadTask;
     private ParserTask polyLinesParserTask;
-
+    private VehicleListEntity vehicleListEntity;
+    ArrayList<String> oldVehicleIds = new ArrayList<String>();
+    ArrayList<String> newVehicleIds = new ArrayList<String>();
+    ArrayList<String> removedVehicleIds = new ArrayList<String>();
+    ArrayList<String> addedVehicleIds = new ArrayList<String>();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -299,13 +303,10 @@ public class BusMapFragment extends Fragment implements AdapterView.OnItemClickL
         pendingMovements = new HashMap<String, Movement>();
         teqBuzzDbHelper = new AppDatabaseHelper(mActivity);
         appDatabaseHelper = new AppDatabaseHelper(mActivity);
+        mainTeqbuzzVehicles = new ArrayList<Vehicle>();
+        mainFavTeqbuzzVehicles = new ArrayList<Vehicle>();
         sharedVehicles = appDatabaseHelper.getSharedVehicles();
         sharedVehiclesCount = appDatabaseHelper.getSharedVehicles().size();
-        // Run favorites bus service
-        /*if (Utility.isConnectingToInternet(mActivity) && myPreferences.isLoginned()) {
-            runFavouritesBusVehicleService();
-        } else {
-        }*/
     }
 
     public void runFavouritesBusVehicleService() {
@@ -328,7 +329,6 @@ public class BusMapFragment extends Fragment implements AdapterView.OnItemClickL
                 R.color.colorPrimary,
                 R.color.colorPrimary,
                 R.color.colorPrimary);
-        //  swipe_layout.setOnRefreshListener(null);
         swipe_layout.setEnabled(false);
         homeLocationDialogMsg = mActivity.getResources().getString(R.string.homeLocationDialogMsg);
         workLocationDialogMsg = mActivity.getResources().getString(R.string.workLocationDialogMsg);
@@ -626,12 +626,12 @@ public class BusMapFragment extends Fragment implements AdapterView.OnItemClickL
                     String addFavVehicleUrl = "user_id=" + user.getUser_id() + "&vehicle_id=" + selectedVehicle.getVehicle_id() + "&flag=" + Vehicle.IS_NOT_FAV;
                     webService.addRemoveVehicleAsFav(mActivity, BusMapFragment.this, selectedVehicle, addFavVehicleUrl);
                     //teqbuzzVehicleListAdapter.notifyDataSetChanged();
-                    teqBuzzFavVehicles = teqBuzzDbHelper.getFavVehicles();
+                    /*teqBuzzFavVehicles = teqBuzzDbHelper.getFavVehicles();
                     if (teqBuzzFavVehicles == null || teqBuzzFavVehicles.size() <= 0) {
                         favVehiclesSnackBar = Utility.showSnackForFavBuses(mActivity, BusMapFragment.this);
                         if (isFavouriteFlagEnabled() && !isSharedVehicleModeEnabled)
                             favVehiclesSnackBar.show(mActivity);
-                    }
+                    }*/
 
                 }
                 setSelectedVehicle(selectedVehicle);
@@ -1379,16 +1379,17 @@ public class BusMapFragment extends Fragment implements AdapterView.OnItemClickL
 
     public void onFavFilterEnabled() {
         showProgress();
+        removeNonFavBuses(teqBuzzVehicles);
         onSharedFilterDisabled();
         setFavouriteFlag(true);
         choiceMenuItem.setTitle(mActivity.getResources().getString(R.string.all));
         ((MainActivity) mActivity).setActionBarTitle(mActivity.getResources().getString(R.string.favourites));
 
-        teqBuzzFavVehicles = teqBuzzDbHelper.getFavVehicles();
+        /*teqBuzzFavVehicles = teqBuzzDbHelper.getFavVehicles();
         if (teqBuzzFavVehicles == null || teqBuzzFavVehicles.size() == 0) {
             favVehiclesSnackBar = Utility.showSnackForFavBuses(mActivity, this);
             favVehiclesSnackBar.show(mActivity);
-        }
+        }*/
     }
 
     public void onSharedFilterEnabled() {
@@ -1786,9 +1787,6 @@ public class BusMapFragment extends Fragment implements AdapterView.OnItemClickL
                 //nativeAdAdapter.notifyDataSetChanged();
 
 
-                updateVehicleMarkers();
-
-
                 // run get vehicle service
 
 
@@ -1829,87 +1827,50 @@ public class BusMapFragment extends Fragment implements AdapterView.OnItemClickL
 
     }
 
-    private void updateVehicleMarkers() {/*
+    private void updateVehicleMarkers(ArrayList<Vehicle> receivedVehicles, ArrayList<Vehicle> teqbuzzVehicles) {
+        if (teqBuzzVehicleMarkers.size() == teqbuzzVehicles.size()) {
+        } else if (teqBuzzVehicleMarkers.size() == teqbuzzVehicles.size()) {
+        } else if (teqBuzzVehicleMarkers.size() == teqbuzzVehicles.size()) {
+        }
 
-        int vehiclesSize = vehicles.size();
-        Vehicle tempVehicle;
-        int markersSize = markerArrayList.size();
-        Marker tempMarker;
-
-        ArrayList<Marker> newMarkers = new ArrayList<Marker>();
-        ArrayList<MarkerOptions> newMarkerOptions = new ArrayList<MarkerOptions>();
-
-        for (int i = 0; i < vehiclesSize; i++) {
-            tempVehicle = vehicles.get(i);
-
-            String vehicle_id = tempVehicle.getVehicle_id();
-            String latitude = tempVehicle.getLatitude();
-            String longitude = tempVehicle.getLongitude();
-
-            for (int j = 0; j < markersSize; j++) {
-                tempMarker = markerArrayList.get(j);
-
-                if (vehicle_id.equalsIgnoreCase(tempMarker.getTitle())) {
-                    LatLng tempLatLng = new LatLng(Double.parseDouble(latitude), Double.parseDouble(longitude));
-                    newMarkers.add(tempMarker);
-                    // if (marker.getPosition() != tempLatLng)
-                    //i++;
-                    j = markersSize;
-                    animateMarker(teqBuzzVehiclePosition, teqBuzzVehicle, tempMarker, tempLatLng, false, false);
-
-
+        ArrayList<Marker> tempMarkers = new ArrayList<Marker>();
+        // remove markers
+        for (Vehicle vehicle : teqbuzzVehicles) {
+            for (Marker marker : teqBuzzVehicleMarkers) {
+                String listVehicleId = vehicle.getVehicle_id();
+                String markerVehicleId = marker.getTitle().replace("teqbuzz_marker_", "");
+                if (listVehicleId.equalsIgnoreCase(markerVehicleId)) {
+                    tempMarkers.add(marker);
                 } else {
-                    if (j == markersSize - 1) {
-
-                        tempMarkerOptions = new MarkerOptions().position(
-                                new LatLng(Double.parseDouble(latitude),
-                                        Double.parseDouble(longitude)))
-                                .snippet(vehicle_id).title(vehicle_id);
-
-                        tempMarker = googleMap.addMarker(tempMarkerOptions);
-                        newMarkers.add(tempMarker);
-                        newMarkerOptions.add(tempMarkerOptions);
-
-                    } else {
-
-                    }
 
                 }
-
-
             }
+        }
+        //teqBuzzVehicleMarkers.clear();
+        teqBuzzVehicleMarkers.removeAll(tempMarkers);
+        for (Marker marker : teqBuzzVehicleMarkers) {
+            marker.remove();
+        }
+        teqBuzzVehicleMarkers.addAll(tempMarkers);
 
-            if (markerArrayList.size() == 0) {
-                tempMarkerOptions = new MarkerOptions().position(
-                        new LatLng(Double.parseDouble(latitude), Double.parseDouble(longitude)))
-                        .snippet(vehicle_id).title(vehicle_id).icon(vehicle_marker);
 
-                tempMarker = googleMap.addMarker(tempMarkerOptions);
-                newMarkers.add(tempMarker);
-                // markerArrayList.add(tempMarker);
-                //tempMarkerOptions.icon(myMarkerIcon);
-                newMarkerOptions.add(tempMarkerOptions);
+     /*   for (String newId : removedVehicleIds) {
+            for (Marker marker : teqBuzzVehicleMarkers) {
+                String markerVehicleId = marker.getTitle().replace("teqbuzz_marker_", "");
+                if (markerVehicleId.equalsIgnoreCase(newId)) {
+                    Vehicle vehicle = getVehicleById(newId, receivedVehicles);
+                }
             }
+        }*/
+
+
+    }
+
+    private Vehicle getVehicleById(String newId, ArrayList<Vehicle> receivedVehicles) {
+        for (Vehicle vehicle : teqBuzzVehicles) {
 
         }
-
-
-        markers.clear();
-        markers.addAll(newMarkerOptions);
-        markerArrayList.clear();
-        markerArrayList.addAll(newMarkers);
-
-
-        // is favourite bus flag selected, move the user marker to a nearby favourite bus
-        if (isFavouriteFlagEnabled()) {
-            double fav_bus_latitude = Double.parseDouble(vehicles.get(0).getLatitude());
-            double fav_bus_longitude = Double.parseDouble(vehicles.get(0).getLatitude());
-            isUserMarkerAnimationEnabled = true;
-            animateMarker(teqBuzzVehiclePosition, teqBuzzVehicle, user_marker,
-                    new LatLng(fav_bus_latitude, fav_bus_longitude), false, true);
-        }
-
-*/
+        return null;
     }
 
 
@@ -1963,7 +1924,7 @@ public class BusMapFragment extends Fragment implements AdapterView.OnItemClickL
     public void onBusListItemSelcted(int index) {
         fabMenu.close(true);
         clickedVehicleIndex = index;
-        if (teqBuzzDbHelper.isVehicleFav(teqBuzzVehicles.get(clickedVehicleIndex))) {
+        if (teqBuzzVehicles.get(index).isFavourite()) {
             isFavText.setText("Remove from Fav");
         } else {
             isFavText.setText("Add as Fav");
@@ -2646,41 +2607,55 @@ public class BusMapFragment extends Fragment implements AdapterView.OnItemClickL
 
     }
 
-    public void onTeqBuzzVehicleListEntityLoaded(VehicleListEntity vehicleListEntity, int callMode) {
+    public void onTeqBuzzVehicleListEntityLoaded(VehicleListEntity vehicleListEntity, int callMode, boolean isSingleRun) {
         //first time vehicle added
+        ArrayList<Vehicle> receivedVehicles = null;
+        HashMap<String, Vehicle> receivedVehicleHasMap = new HashMap<String, Vehicle>();
+
         Log.d("getVehicleListMarch", "onTeqBuzzVehicleListEntityLoaded");
         GET_VEHICLE_SERVICE_DELAY = 10000;
         if (callMode == CALL_MODE) {
-            stopProgress();
+            if (!isSingleRun) {
+                stopProgress();
+            }
             hideVehicleLoadingView();
             if (vehicleListEntity != null) {
-                ArrayList<Vehicle> receivedVehicles = vehicleListEntity.getVehicles();
+                this.vehicleListEntity = vehicleListEntity;
+                receivedVehicles = vehicleListEntity.getVehicles();
+                vehicleListEntity.getVehicleHashMaps();
+                mainTeqbuzzVehicles.clear();
+                mainTeqbuzzVehicles.addAll(receivedVehicles);
+
+
                 if (receivedVehicles != null && receivedVehicles.size() > 0) {
+
                     hideProgressBar();
                     hideVehicleNotFoundSnack();
+                    // SORTING VEHICLES DISTANCE WISE
                     if (!isCmgFromDeepLink) {
                         receivedVehicles = sortDistanceWise(receivedVehicles);
                     }
+
                     if (isFavouriteFlagEnabled()) {
-                        //Utility.showToast(mActivity, "fav part executed");
-                        //receivedVehicles = removeNonFavBuses(receivedVehicles);
-                        for (Marker marker : teqBuzzVehicleMarkers) {
-                            if (marker.getTag() != null) {
-                                Log.d("maarkertag before", String.valueOf(marker.getTag()));
-                            } else {
-                                Log.d("markertag before", "marker is null");
-                            }
-                        }
+                        receivedVehicles = removeNonFavBuses(receivedVehicles);
                         teqBuzzVehicleMarkers = removeNonFavMarkers(receivedVehicles);
                         hideProgressBar();
                     }
-                    for (Marker marker : teqBuzzVehicleMarkers) {
-                        if (marker.getTag() != null) {
-                            Log.d("markertag after", String.valueOf(marker.getTag()));
-                        } else {
-                            Log.d("markertag after", "marker is null");
+                    if (receivedVehicles != null/* && (receivedVehicles.size() == teqBuzzVehicles.size())*/) {
+                        if (receivedVehicles != null && receivedVehicles.size() > 0 && teqBuzzVehicles != null && teqBuzzVehicles.size() > 0) {
+                            try {
+                                receivedVehicles = Utility.setDummyMovements(receivedVehicles, teqBuzzVehicles);
+                            } catch (IndexOutOfBoundsException e) {
+
+                            }
+                        }
+                        for (Vehicle vehicle : receivedVehicles) {
+                            Log.d("VehicleLocations", "Vehicle id " + vehicle.getVehicle_line_number() + " " + " lat is " + vehicle.getLatitude() + " lon is " + vehicle.getLongitude());
                         }
                     }
+
+                    checkNewlyAddedAndRemovedVehicles(receivedVehicles);
+
                     if (teqBuzzVehicles != null && teqBuzzVehicles.size() > 0) {
                         //already vehicle loaded
                         if (vehicleNotFoundSnackBar.isShown()) {
@@ -2689,7 +2664,7 @@ public class BusMapFragment extends Fragment implements AdapterView.OnItemClickL
                         hideFavVehicleSnackBar();
                         try {
                             //updateTeqBuzzVehicles(receivedVehicles);
-                            updateNewTeqbuzzVehicles(receivedVehicles);
+                            updateNewTeqbuzzVehicles(receivedVehicles, isSingleRun);
                         } catch (IndexOutOfBoundsException e) {
                             Log.e(TAG, "IndexOutOfBoundsException while updating vehicles");
                         }
@@ -2717,11 +2692,8 @@ public class BusMapFragment extends Fragment implements AdapterView.OnItemClickL
                     if (teqBuzzVehicles == null || teqBuzzVehicles.size() <= 0) {
                         showVehicleNotFoundSnack();
                     }
-                    // run get vehicle service again
-               /* if (!isErrorOccured)
-                    Utility.showToast(mActivity, mActivity.getResources().getString(R.string.some_error_occured));
-*/
-                    if (Utility.isConnectingToInternet(mActivity))
+
+                    if (Utility.isConnectingToInternet(mActivity) && !isSingleRun)
                         runGetVehicleService(user.getMode(), isFavouriteFlagEnabled());
                 }
             } else {
@@ -2731,10 +2703,39 @@ public class BusMapFragment extends Fragment implements AdapterView.OnItemClickL
                 Log.d(TAG, "vehicle list cleared");
                 showVehicleNotFoundSnack();
 
-                if (Utility.isConnectingToInternet(mActivity))
+                if (Utility.isConnectingToInternet(mActivity) && !isSingleRun)
                     runGetVehicleService(user.getMode(), isFavouriteFlagEnabled());
             }
         }
+    }
+
+    private void checkNewlyAddedAndRemovedVehicles(ArrayList<Vehicle> receivedVehicles) {
+        oldVehicleIds.clear();
+        for (Vehicle vehicle : teqBuzzVehicles) {
+            oldVehicleIds.add(vehicle.getVehicle_id());
+        }
+
+        newVehicleIds.clear();
+        for (Vehicle vehicle : receivedVehicles) {
+            newVehicleIds.add(vehicle.getVehicle_id());
+        }
+
+        // checking new added vehicles
+        addedVehicleIds.clear();
+        for (String newId : newVehicleIds) {
+            if (!oldVehicleIds.contains(newId)) {
+                addedVehicleIds.add(newId);
+            }
+        }
+
+        // checking new removed vehicles
+        removedVehicleIds.clear();
+        for (String oldId : oldVehicleIds) {
+            if (!newVehicleIds.contains(oldId)) {
+                removedVehicleIds.add(oldId);
+            }
+        }
+
     }
 
     private ArrayList<Marker> removeNonFavMarkers(ArrayList<Vehicle> receivedVehicles) {
@@ -2743,8 +2744,6 @@ public class BusMapFragment extends Fragment implements AdapterView.OnItemClickL
             for (Marker marker : teqBuzzVehicleMarkers) {
                 String listVehicleId = vehicle.getVehicle_id();
                 String markerVehicleId = marker.getTitle().replace("teqbuzz_marker_", "");
-                //if (markerVehicle != null) {
-                //  String markerVehicleId = markerVehicle.getVehicle_id();
                 if (listVehicleId.equalsIgnoreCase(markerVehicleId)) {
                     // Fav vehicle and marker
                     tempMarkers.add(marker);
@@ -2753,9 +2752,7 @@ public class BusMapFragment extends Fragment implements AdapterView.OnItemClickL
                     Log.d("markerremoved", "marker removed");
                     //marker.remove();
                 }
-            } /*else {
-                    Log.d("teqBuzzVehicleMarkers", "marker is null");
-                }*/
+            }
         }
         //}
         ArrayList<Marker> markers = new ArrayList<Marker>();
@@ -2781,30 +2778,28 @@ public class BusMapFragment extends Fragment implements AdapterView.OnItemClickL
         }
     }
 
-    private void updateNewTeqbuzzVehicles(ArrayList<Vehicle> receivedVehicles) {
+    private void updateNewTeqbuzzVehicles(ArrayList<Vehicle> receivedVehicles, boolean isSingleRun) {
 
         teqBuzzVehicles.clear();
         teqBuzzVehicles.addAll(receivedVehicles);
+
         if (selectedVehicle != null) {
             String selectedVehicleId = selectedVehicle.getVehicle_id();
-            for (Vehicle receivedVehicle : receivedVehicles) {
+            for (Vehicle receivedVehicle : teqBuzzVehicles) {
                 if (selectedVehicleId.equalsIgnoreCase(receivedVehicle.getVehicle_id())) {
                     receivedVehicle.setSelected(true);
                 }
             }
         }
         teqbuzzVehicleListAdapter.notifyDataSetChanged();
+        updateVehicleMarkers(receivedVehicles, teqBuzzVehicles);
         setMarkersMovementForVehicles(teqBuzzVehicles, receivedVehicles);
-        runGetVehicleService(user.getMode(), isFavouriteFlagEnabled());
-        if (teqBuzzVehicleMarkers != null) {
-            /*for (Marker marker : teqBuzzVehicleMarkers) {
-                if (marker.getTag() != null) {
-                    Log.d("markertag", String.valueOf(marker.getTag()));
-                } else {
-                    Log.d("markertag", "marker is null");
-                }
-            }*/
+        if (!isSingleRun) {
+            runGetVehicleService(user.getMode(), isFavouriteFlagEnabled());
+        } else {
+            stopProgress();
         }
+
 
     }
 
@@ -2828,7 +2823,9 @@ public class BusMapFragment extends Fragment implements AdapterView.OnItemClickL
         if (Utility.isConnectingToInternet(mActivity)) {
             if (!IS_NO_VEHICLE_SNACKBAR_SHOWN) {
                 IS_NO_VEHICLE_SNACKBAR_SHOWN = true;
-                vehicleNotFoundSnackBar.show(mActivity);
+                if (!vehicleNotFoundSnackBar.isShown()) {
+                    vehicleNotFoundSnackBar.show(mActivity);
+                }
             }
         }
     }
@@ -2848,18 +2845,16 @@ public class BusMapFragment extends Fragment implements AdapterView.OnItemClickL
         vehicle_not_found_textview.setVisibility(View.GONE);
     }
 
-    private ArrayList<Vehicle> removeNonFavBuses(ArrayList<Vehicle> receivedVehicles) {
+    private ArrayList<Vehicle> removeNonFavBuses(ArrayList<Vehicle> teqbuzzVehicles) {
         ArrayList<Vehicle> tempVehicles = new ArrayList<Vehicle>();
-        ArrayList<Vehicle> favVehicles = teqBuzzDbHelper.getFavVehicles();
-        for (Vehicle receivedVehicle : receivedVehicles) {
-
-            for (Vehicle favVehicle : favVehicles) {
-                if (receivedVehicle.getVehicle_id().equalsIgnoreCase(favVehicle.getVehicle_id())) {
-                    tempVehicles.add(receivedVehicle);
-                }
-
+        for (Vehicle vehicle : teqbuzzVehicles) {
+            if (vehicle.isFavourite()) {
+                tempVehicles.add(vehicle);
             }
         }
+        teqbuzzVehicles.clear();
+        teqBuzzVehicles.addAll(tempVehicles);
+        teqbuzzVehicleListAdapter.notifyDataSetChanged();
         return tempVehicles;
     }
 
@@ -3348,9 +3343,11 @@ public class BusMapFragment extends Fragment implements AdapterView.OnItemClickL
         hideProgressBar();
         if (favFlag.equalsIgnoreCase(Vehicle.IS_FAV)) {
             long isAdded = teqBuzzDbHelper.addVehicleToFavList(vehicle);
+            vehicle.setFavourite(true);
             Utility.showSnack(mActivity, mActivity.getResources().getString(R.string.fav_added));
         } else if (favFlag.equalsIgnoreCase(Vehicle.IS_NOT_FAV)) {
             teqBuzzDbHelper.deleteVehicleFromFavList(selectedVehicle);
+            vehicle.setFavourite(false);
             Utility.showSnack(mActivity, mActivity.getResources().getString(R.string.fav_removed));
         }
         teqbuzzVehicleListAdapter.notifyDataSetChanged();
@@ -3837,7 +3834,8 @@ public class BusMapFragment extends Fragment implements AdapterView.OnItemClickL
                         CALL_MODE = Constants.CALL_MODE_FAVORITE;
                         String getfavVehiclesUrl = "user_id=" + user_id + "&latitude=" + user.getTemp_latitude() +
                                 "&longitude=" + user.getTemp_longitude() + "&distance=" + "200000" + "&user_id=" + user.getUser_id();
-                        webService.getVehicleList(mActivity, BusMapFragment.this, getfavVehiclesUrl, mode, favouriteFlagEnabled, CALL_MODE);
+                        webService.getVehicleList(mActivity, BusMapFragment.this, WebService.GET_VEHICLE_LIST_URL +
+                                "latitude=" + str_latitude + "&longitude=" + str_longitude + "&distance=" + distanceRange + "&limit=" + Constants.VEHICLE_LIMIT + "&offset=" + "0" + "&user_id=" + user.getUser_id(), mode, favouriteFlagEnabled, CALL_MODE, false);
                     } else {
                         user = myPreferences.getUser();
                         str_latitude = user.getTemp_latitude();
@@ -3845,7 +3843,7 @@ public class BusMapFragment extends Fragment implements AdapterView.OnItemClickL
                         CALL_MODE = Constants.CALL_MODE_NORMAL;
                         webService.getVehicleList(mActivity, BusMapFragment.this, WebService.GET_VEHICLE_LIST_URL +
                                         "latitude=" + str_latitude + "&longitude=" + str_longitude + "&distance=" + distanceRange + "&limit=" + Constants.VEHICLE_LIMIT + "&offset=" + "0" + "&user_id=" + user.getUser_id(), mode,
-                                favouriteFlagEnabled, CALL_MODE);
+                                favouriteFlagEnabled, CALL_MODE, false);
                     }
                 } else {
 
@@ -3887,6 +3885,8 @@ public class BusMapFragment extends Fragment implements AdapterView.OnItemClickL
     public void runInstantGetVehicleService(final int mode,
                                             final boolean favouriteFlagEnabled) {
         //isCmgFromDeepLink = ((MainActivity) mActivity).isCmgFromDeepLink();
+        final boolean singleRun = true;
+        webService.clearAll();
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
@@ -3909,22 +3909,23 @@ public class BusMapFragment extends Fragment implements AdapterView.OnItemClickL
                                 "&longitude=" + user.getTemp_longitude();
                         CALL_MODE = Constants.CALL_MODE_SHARED;
                         webService.getSharedVehicles(mActivity, BusMapFragment.this, getSharedVehiclesUrl, mode, favouriteFlagEnabled, CALL_MODE);
-                    } else if (isFavouriteSelected) {
-
+                    } else if (isFavouriteFlagEnabled()) {
+                        webService.clear();
                         user = myPreferences.getUser();
                         String user_id = myPreferences.getUser().getUser_id();
-                        String getfavVehiclesUrl = "user_id=" + user_id + "&latitude=" + user.getTemp_latitude() +
+                        String getfavVehiclesUrl = WebService.GET_VEHICLE_LIST_URL + "&latitude=" + user.getTemp_latitude() +
                                 "&longitude=" + user.getTemp_longitude() + "&distance=" + distanceRange + "&user_id=" + user.getUser_id();
                         CALL_MODE = Constants.CALL_MODE_FAVORITE;
-                        webService.getVehicleList(mActivity, BusMapFragment.this, getfavVehiclesUrl, mode, favouriteFlagEnabled, CALL_MODE);
-
+                        webService.getVehicleList(mActivity, BusMapFragment.this, WebService.GET_VEHICLE_LIST_URL +
+                                "latitude=" + str_latitude + "&longitude=" + str_longitude + "&distance=" + distanceRange + "&limit=" + Constants.VEHICLE_LIMIT + "&offset=" + "0" + "&user_id=" + user.getUser_id(), mode, favouriteFlagEnabled, CALL_MODE, singleRun);
                     } else {
+                        webService.clear();
                         user = myPreferences.getUser();
                         str_latitude = user.getTemp_latitude();
                         str_longitude = user.getTemp_longitude();
                         CALL_MODE = Constants.CALL_MODE_NORMAL;
                         webService.getVehicleList(mActivity, BusMapFragment.this, WebService.GET_VEHICLE_LIST_URL +
-                                "latitude=" + str_latitude + "&longitude=" + str_longitude + "&distance=" + distanceRange + "&limit=" + Constants.VEHICLE_LIMIT + "&offset=" + "0" + "&user_id=" + user.getUser_id(), mode, favouriteFlagEnabled, CALL_MODE);
+                                "latitude=" + str_latitude + "&longitude=" + str_longitude + "&distance=" + distanceRange + "&limit=" + Constants.VEHICLE_LIMIT + "&offset=" + "0" + "&user_id=" + user.getUser_id(), mode, favouriteFlagEnabled, CALL_MODE, singleRun);
                     }
                 } else {
                     if (isSharedVehicleModeEnabled) {

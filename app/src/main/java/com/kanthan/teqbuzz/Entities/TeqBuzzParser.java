@@ -1,6 +1,7 @@
 package com.kanthan.teqbuzz.Entities;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.kanthan.teqbuzz.models.Schedule;
 import com.kanthan.teqbuzz.models.User;
@@ -32,7 +33,7 @@ public class TeqBuzzParser {
         this.context = context;
     }
 
-    public VehicleListEntity getVehicleListEntity(String response) {
+    public VehicleListEntity getVehicleListEntity(String response, boolean favouriteFlagEnabled) {
 
         VehicleListEntity vehicleListEntity = new VehicleListEntity();
         ArrayList<HashMap<String, Vehicle>> vehicleHashMaps = new ArrayList<HashMap<String, Vehicle>>();
@@ -91,7 +92,16 @@ public class TeqBuzzParser {
                     HashMap<String, Vehicle> vehicleHashMap = new HashMap<String, Vehicle>();
                     vehicleHashMap.put(String.valueOf(i), vehicle);
                     vehicleHashMaps.add(vehicleHashMap);
+                    Log.d("ServerVehicleLocations", "Vehicle id " + vehicle.getVehicle_line_number() + " " + " lat is " + vehicle.getLatitude() + " lon is " + vehicle.getLongitude());
+/*                    if (favouriteFlagEnabled) {
+                        if (vehicle.isFavourite()) {
+                            vehicles.add(vehicle);
+                        }
+                    } else {
+                        vehicles.add(vehicle);
+                    }*/
                     vehicles.add(vehicle);
+
                 }
             }
             vehicleListEntity.setVehicles(vehicles);

@@ -11,6 +11,15 @@ import java.util.HashMap;
 public class VehicleListEntity {
 
     public ArrayList<Vehicle> vehicles;
+    public HashMap<String, Vehicle> vehicleHashMap;
+
+    public HashMap<String, Vehicle> getVehicleHashMap() {
+        return vehicleHashMap;
+    }
+
+    public void setVehicleHashMap(HashMap<String, Vehicle> vehicleHashMap) {
+        this.vehicleHashMap = vehicleHashMap;
+    }
 
     public ArrayList<HashMap<String, Vehicle>> getVehicleHashMaps() {
         return vehicleHashMaps;

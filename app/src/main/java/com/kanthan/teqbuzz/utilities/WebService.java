@@ -31,7 +31,6 @@ import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * Created by user on 3/12/2016.
@@ -301,13 +300,14 @@ public class WebService {
 
     // Get Vehicles list
 
-    public void getVehicleList(final Context context, final BusMapFragment busMapFragment, String getVehicleListUrl, final int mode, final boolean favouriteFlagEnabled, final int callMode) {
+    public void getVehicleList(final Context context, final BusMapFragment busMapFragment, String getVehicleListUrl, final int mode, final boolean favouriteFlagEnabled, final int callMode, final boolean isSingleRun) {
         // Tag used to cancel the request
         Log.d("getVehicleListMarch", getVehicleListUrl);
         String tag_json_obj = "getVehicleList";
-        AppController.getInstance().cancelPendingRequests("getSharedVehicles");
+        /*AppController.getInstance().cancelPendingRequests("getSharedVehicles");
         AppController.getInstance().cancelPendingRequests("getVehicleList");
-        AppController.getInstance().cancelPendingRequests("getVehicleDetails");
+        AppController.getInstance().cancelPendingRequests("getVehicleDetails");*/
+        clearAll();
 
         getVehicleRequest = new JsonObjectRequest(Request.Method.GET,
                 getVehicleListUrl, null,
@@ -326,18 +326,18 @@ public class WebService {
 
                                 @Override
                                 protected Void doInBackground(Void... voids) {
-                                    vehicleListEntity = new TeqBuzzParser().getVehicleListEntity(finalRes);
+                                    vehicleListEntity = new TeqBuzzParser().getVehicleListEntity(finalRes,favouriteFlagEnabled);
                                     return null;
                                 }
 
                                 @Override
                                 protected void onPostExecute(Void aVoid) {
                                     super.onPostExecute(aVoid);
-                                    busMapFragment.onTeqBuzzVehicleListEntityLoaded(vehicleListEntity, callMode);
+                                    busMapFragment.onTeqBuzzVehicleListEntityLoaded(vehicleListEntity, callMode, isSingleRun);
                                 }
                             }.execute();
                         } catch (UnsupportedEncodingException e) {
-                            busMapFragment.onTeqBuzzVehicleListEntityLoaded(null, callMode);
+                            busMapFragment.onTeqBuzzVehicleListEntityLoaded(null, callMode, isSingleRun);
                             e.printStackTrace();
                         }
                         Log.d("getVehicleList", response.toString());
@@ -348,7 +348,7 @@ public class WebService {
 
             @Override
             public void onErrorResponse(VolleyError error) {
-                busMapFragment.onTeqBuzzVehicleListEntityLoaded(null, callMode);
+                busMapFragment.onTeqBuzzVehicleListEntityLoaded(null, callMode, isSingleRun);
                 VolleyLog.d("getVehicleList", "Error: " + error.getMessage());
                 // hide the progress dialog
 
@@ -395,18 +395,18 @@ public class WebService {
 
                                 @Override
                                 protected Void doInBackground(Void... voids) {
-                                    vehicleListEntity = new TeqBuzzParser().getVehicleListEntity(finalRes);
+                                    vehicleListEntity = new TeqBuzzParser().getVehicleListEntity(finalRes,false);
                                     return null;
                                 }
 
                                 @Override
                                 protected void onPostExecute(Void aVoid) {
                                     super.onPostExecute(aVoid);
-                                    busMapFragment.onTeqBuzzVehicleListEntityLoaded(vehicleListEntity, callMode);
+                                    busMapFragment.onTeqBuzzVehicleListEntityLoaded(vehicleListEntity, callMode, false);
                                 }
                             }.execute();
                         } catch (UnsupportedEncodingException e) {
-                            busMapFragment.onTeqBuzzVehicleListEntityLoaded(null, callMode);
+                            busMapFragment.onTeqBuzzVehicleListEntityLoaded(null, callMode, false);
                             e.printStackTrace();
                         }
                         Log.d("getVehicleList", response.toString());
@@ -417,7 +417,7 @@ public class WebService {
 
             @Override
             public void onErrorResponse(VolleyError error) {
-                busMapFragment.onTeqBuzzVehicleListEntityLoaded(null, callMode);
+                busMapFragment.onTeqBuzzVehicleListEntityLoaded(null, callMode, false);
                 VolleyLog.d("getVehicleList", "Error: " + error.getMessage());
                 // hide the progress dialog
 
@@ -457,9 +457,9 @@ public class WebService {
                             res = URLDecoder.decode(res, "UTF-8");
 
                             VehicleListEntity vehicleListEntity = new TeqBuzzParser().getVehicleDetailEntity(res);
-                            busMapFragment.onTeqBuzzVehicleListEntityLoaded(vehicleListEntity, callMode);
+                            busMapFragment.onTeqBuzzVehicleListEntityLoaded(vehicleListEntity, callMode, false);
                         } catch (UnsupportedEncodingException e) {
-                            busMapFragment.onTeqBuzzVehicleListEntityLoaded(null, callMode);
+                            busMapFragment.onTeqBuzzVehicleListEntityLoaded(null, callMode, false);
                             e.printStackTrace();
                         }
                         Log.d("", response.toString());
@@ -470,7 +470,7 @@ public class WebService {
 
             @Override
             public void onErrorResponse(VolleyError error) {
-                busMapFragment.onTeqBuzzVehicleListEntityLoaded(null, callMode);
+                busMapFragment.onTeqBuzzVehicleListEntityLoaded(null, callMode, false);
                 VolleyLog.d("", "Error: " + error.getMessage());
                 // hide the progress dialog
 
@@ -552,7 +552,7 @@ public class WebService {
         clearAll();
         String tag_json_obj = "getFavVehicleList";
         String getFavVehicleListUrl = GET_FAVOURITE_VEHICLES_URL + url;
-
+        Log.d("", "");
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET,
                 getFavVehicleListUrl, null,
                 new Response.Listener<JSONObject>() {
@@ -568,14 +568,14 @@ public class WebService {
 
                                 @Override
                                 protected Void doInBackground(Void... voids) {
-                                    vehicleListEntity = new TeqBuzzParser().getVehicleListEntity(finalRes);
+                                    vehicleListEntity = new TeqBuzzParser().getVehicleListEntity(finalRes,false);
                                     return null;
                                 }
 
                                 @Override
                                 protected void onPostExecute(Void aVoid) {
                                     super.onPostExecute(aVoid);
-                                    busMapFragment.onTeqBuzzVehicleListEntityLoaded(vehicleListEntity, callMode);
+                                    busMapFragment.onTeqBuzzVehicleListEntityLoaded(vehicleListEntity, callMode, false);
                                 }
                             }.execute();
                         } catch (UnsupportedEncodingException e) {
@@ -588,7 +588,7 @@ public class WebService {
 
             @Override
             public void onErrorResponse(VolleyError error) {
-                busMapFragment.onTeqBuzzVehicleListEntityLoaded(null, callMode);
+                busMapFragment.onTeqBuzzVehicleListEntityLoaded(null, callMode, false);
                 VolleyLog.d("", "Error: " + error.getMessage());
             }
         });
@@ -619,7 +619,7 @@ public class WebService {
 
                                 @Override
                                 protected Void doInBackground(Void... voids) {
-                                    vehicleListEntity = new TeqBuzzParser().getVehicleListEntity(finalRes);
+                                    vehicleListEntity = new TeqBuzzParser().getVehicleListEntity(finalRes,false);
                                     return null;
                                 }
 

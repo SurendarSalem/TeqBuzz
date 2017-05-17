@@ -140,28 +140,28 @@ public class MarkerAnimation {
         Log.d("Vehicle Animation", "Id is " + teqbuzzVehicle.getVehicle_id() + " " + "new position is latitude : "+finalPosition.latitude + " " + "is longitude : "+finalPosition.longitude);
         animator.setDuration(Constants.MAP_SPEED);
         animator.start();
-        /*animator.addListener(new Animator.AnimatorListener() {
+        animator.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animator) {
-                Log.d("MarkerAnimation", "vehicle :" + receivedVehicle.getVehicle_id() + " animation started");
+                /*Log.d("MarkerAnimation", "vehicle :" + receivedVehicle.getVehicle_id() + " animation started");
                 receivedVehicle.setMoving(true);
                 busMapFragment.onTeqbuzzVehicleAnimationProgress(teqBuzzVehiclePosition, receivedVehicle, true);
-                busMapFragment.onTeqbuzzVehicleAnimatedCompleted(teqBuzzVehiclePosition, receivedVehicle, latitude, longitude, finalPosition);
+                busMapFragment.onTeqbuzzVehicleAnimatedCompleted(teqBuzzVehiclePosition, receivedVehicle, latitude, longitude, finalPosition);*/
             }
 
             @Override
             public void onAnimationEnd(Animator animator) {
-                Log.d("MarkerAnimation", "vehicle :" + receivedVehicle.getVehicle_id() + " animation end");
+                /*Log.d("MarkerAnimation", "vehicle :" + receivedVehicle.getVehicle_id() + " animation end");
                 receivedVehicle.setMoving(false);
                 busMapFragment.onTeqbuzzVehicleAnimationProgress(teqBuzzVehiclePosition, receivedVehicle, false);
-                //busMapFragment.onTeqbuzzVehicleAnimatedCompleted(teqBuzzVehiclePosition, teqBuzzVehicle, finalPosition);
+                //busMapFragment.onTeqbuzzVehicleAnimatedCompleted(teqBuzzVehiclePosition, teqBuzzVehicle, finalPosition);*/
             }
 
             @Override
             public void onAnimationCancel(Animator animator) {
-                Log.d("MarkerAnimation", "vehicle :" + receivedVehicle.getVehicle_id() + " animation cancelled");
+                /*Log.d("MarkerAnimation", "vehicle :" + receivedVehicle.getVehicle_id() + " animation cancelled");
                 receivedVehicle.setMoving(false);
-                busMapFragment.onTeqbuzzVehicleAnimationProgress(teqBuzzVehiclePosition, receivedVehicle, false);
+                busMapFragment.onTeqbuzzVehicleAnimationProgress(teqBuzzVehiclePosition, receivedVehicle, false);*/
             }
 
             @Override
@@ -174,7 +174,7 @@ public class MarkerAnimation {
             public void onAnimationUpdate(ValueAnimator valueAnimator) {
             }
         });
-        animator.start();*/
+        animator.start();
 
     }
 
