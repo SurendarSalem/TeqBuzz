@@ -1375,6 +1375,7 @@ public class BusMapFragment extends Fragment implements AdapterView.OnItemClickL
         choiceMenuItem.setTitle(mActivity.getResources().getString(R.string.fav));
         ((MainActivity) mActivity).setActionBarTitle(mActivity.getResources().getString(R.string.Home));
         showProgress();
+        quickRunGetVehicleService();
     }
 
     public void onFavFilterEnabled() {
@@ -1535,10 +1536,16 @@ public class BusMapFragment extends Fragment implements AdapterView.OnItemClickL
 
     private void removeAllVehicleMarkers() {
 
-        googleMap.clear();
+        /*googleMap.clear();
         markerArrayList.clear();
         markers.clear();
+        */
 
+        for (Marker marker : teqBuzzVehicleMarkers) {
+            marker.remove();
+        }
+
+        teqBuzzVehicleMarkers.clear();
     }
 
     @Override
@@ -2688,6 +2695,7 @@ public class BusMapFragment extends Fragment implements AdapterView.OnItemClickL
                     // No vehicle from server
                     teqBuzzVehicles.clear();
                     teqbuzzVehicleListAdapter.notifyDataSetChanged();
+                    removeAllVehicleMarkers();
                     Log.d(TAG, "vehicle list cleared");
                     if (teqBuzzVehicles == null || teqBuzzVehicles.size() <= 0) {
                         showVehicleNotFoundSnack();
@@ -2700,6 +2708,7 @@ public class BusMapFragment extends Fragment implements AdapterView.OnItemClickL
                 // No vehicle from server
                 teqBuzzVehicles.clear();
                 teqbuzzVehicleListAdapter.notifyDataSetChanged();
+                removeAllVehicleMarkers();
                 Log.d(TAG, "vehicle list cleared");
                 showVehicleNotFoundSnack();
 
@@ -4018,13 +4027,14 @@ public class BusMapFragment extends Fragment implements AdapterView.OnItemClickL
                 internetSnackBar.dismiss();
                 IS_INTERNET_SNACKBAR_SHOWN = false;
             } else {
+                if (webService != null) {
+                    webService.clearAll();
+                }
                 if (internetSnackBar == null) {
                     internetSnackBar = Utility.showSnackForInternet(mActivity, mActivity.getResources().getString(R.string.no_internet), BusMapFragment.this);
                 }
                 internetSnackBar.show(mActivity);
                 IS_INTERNET_SNACKBAR_SHOWN = true;
-
-
             }
         }
     };
