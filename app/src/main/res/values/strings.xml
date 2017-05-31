@@ -152,6 +152,8 @@
     <string name="fav_removed">Bus removed from  your Favourites</string>
     <string name="reset_pwd">Reset Password</string>
     <string name="password_reset">Your new password has been sent to your email</string>
+    <string name="clear">Clear</string>
+    <string name="polylines_clear_alert">Do you want to clear this route from map?</string>
     <string-array name="options_array">
         <item></item>
     </string-array>

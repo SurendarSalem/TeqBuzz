@@ -8,7 +8,7 @@ import android.os.Environment;
 public class Constants {
     public static final int CALL_MODE = -1, CALL_MODE_NORMAL = 1, CALL_MODE_FAVORITE = 2, CALL_MODE_SHARED = 3;
     public static final String IS_COMING_FROM = "isComingFrom";
-    public static final float MAP_ZOOM_LEVEL = 18;
+    public static final float MAP_ZOOM_LEVEL = 12;
     public static final float ROUTE_MAP_ZOOM_LEVEL = 9;
     public static final float MAP_TILT = 0;
     public static final String MY_VEHICLE_ID = "1";

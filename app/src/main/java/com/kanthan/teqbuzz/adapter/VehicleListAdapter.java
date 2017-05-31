@@ -37,6 +37,7 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Locale;
 
 
 /**
@@ -47,7 +48,7 @@ public class VehicleListAdapter extends BaseAdapter {
 
     Context context;
     LayoutInflater inflater;
-    ArrayList<Vehicle> vehicles;
+    ArrayList<Vehicle> vehicles, mainVehicles = new ArrayList<Vehicle>();
     BusMapFragment busMapFragment;
     private String selectedVehicleId;
     Preferences myPreferences;
@@ -68,6 +69,7 @@ public class VehicleListAdapter extends BaseAdapter {
     public VehicleListAdapter(BusMapFragment busMapFragment, final Context applicationContext, ArrayList<Vehicle> vehicles) {
         this.context = applicationContext;
         this.vehicles = vehicles;
+        mainVehicles.addAll(mainVehicles);
         this.busMapFragment = busMapFragment;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         myPreferences = new Preferences(this.context.getApplicationContext());
@@ -145,8 +147,26 @@ public class VehicleListAdapter extends BaseAdapter {
         return vehicles;
     }
 
-    public void setData(ArrayList<Vehicle> teqBuzzVehicles) {
+    public void setData(ArrayList<Vehicle> teqBuzzVehicles, String filterText) {
         this.vehicles = teqBuzzVehicles;
+        mainVehicles.clear();
+        mainVehicles.addAll(teqBuzzVehicles);
+        filter(filterText);
+    }
+
+    public void filter(String charText) {
+        charText = charText.toLowerCase(Locale.getDefault());
+        vehicles.clear();
+        if (charText == null || charText.length() == 0) {
+            vehicles.addAll(mainVehicles);
+        } else {
+            for (Vehicle wp : mainVehicles) {
+                if (wp.getVehicle_line_number().toLowerCase(Locale.getDefault()).contains(charText)) {
+                    vehicles.add(wp);
+                }
+            }
+        }
+        notifyDataSetChanged();
     }
 
     public static class Holder {

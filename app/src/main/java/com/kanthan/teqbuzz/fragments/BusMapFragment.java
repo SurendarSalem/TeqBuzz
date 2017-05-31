@@ -1,6 +1,7 @@
 package com.kanthan.teqbuzz.fragments;
 
 import android.app.Activity;
+import android.app.SearchManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -26,6 +27,7 @@ import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -134,8 +136,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import it.carlom.stikkyheader.core.StikkyHeaderBuilder;
 import it.carlom.stikkyheader.core.animator.AnimatorBuilder;
@@ -146,14 +146,16 @@ import it.carlom.stikkyheader.core.animator.HeaderStikkyAnimator;
 /**
  * Created by user on 3/2/2016.
  */
-public class BusMapFragment extends Fragment implements AdapterView.OnItemClickListener, View.OnClickListener, AdapterView.OnItemLongClickListener, WebServiceListener, OBAWebServiceCallBack {
+public class BusMapFragment extends Fragment implements AdapterView.OnItemClickListener, View.OnClickListener, AdapterView.OnItemLongClickListener, WebServiceListener, OBAWebServiceCallBack, SearchView.OnQueryTextListener {
 
     Activity mActivity;
     Context mContext;
     private View rootView;
     // private MapView mMapView;
     private GoogleMap googleMap;
-    private ArrayList<Vehicle> vehicles, mainTeqbuzzVehicles, mainFavTeqbuzzVehicles;
+    private ArrayList<Vehicle> vehicles = new ArrayList<Vehicle>();
+    private ArrayList<Vehicle> mainTeqbuzzVehicles = new ArrayList<Vehicle>();
+    private ArrayList<Vehicle> mainFavTeqbuzzVehicles = new ArrayList<Vehicle>();
     private ArrayList<String> vehicleIds;
     Preferences myPreferences;
     Double double_latitude, double_longitude;
@@ -292,6 +294,9 @@ public class BusMapFragment extends Fragment implements AdapterView.OnItemClickL
     ArrayList<String> newVehicleIds = new ArrayList<String>();
     ArrayList<String> removedVehicleIds = new ArrayList<String>();
     ArrayList<String> addedVehicleIds = new ArrayList<String>();
+    private MenuItem searchMenuItem;
+    private SearchView searchView;
+    private String filterText = "";
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -625,7 +630,7 @@ public class BusMapFragment extends Fragment implements AdapterView.OnItemClickL
                     //teqBuzzDbHelper.deleteVehicleFromFavList(selectedVehicle);
                     String addFavVehicleUrl = "user_id=" + user.getUser_id() + "&vehicle_id=" + selectedVehicle.getVehicle_id() + "&flag=" + Vehicle.IS_NOT_FAV;
                     webService.addRemoveVehicleAsFav(mActivity, BusMapFragment.this, selectedVehicle, addFavVehicleUrl);
-                    //teqbuzzVehicleListAdapter.notifyDataSetChanged();
+                    //teqbuzzVehicleListAdapter.notifyDataSetChanged();teqbuzzVehicleListAdapter.setData(teqBuzzVehicles);
                     /*teqBuzzFavVehicles = teqBuzzDbHelper.getFavVehicles();
                     if (teqBuzzFavVehicles == null || teqBuzzFavVehicles.size() <= 0) {
                         favVehiclesSnackBar = Utility.showSnackForFavBuses(mActivity, BusMapFragment.this);
@@ -659,6 +664,7 @@ public class BusMapFragment extends Fragment implements AdapterView.OnItemClickL
             }
         }
         teqbuzzVehicleListAdapter.notifyDataSetChanged();
+        teqbuzzVehicleListAdapter.setData(teqBuzzVehicles, filterText);
 
     }
 
@@ -815,7 +821,38 @@ public class BusMapFragment extends Fragment implements AdapterView.OnItemClickL
             setCustomMarkersInMap();
             moveMapCameraToLastUsedLocation();
             initialiseUserMarker();
+            googleMap.setOnPolylineClickListener(new GoogleMap.OnPolylineClickListener() {
+                @Override
+                public void onPolylineClick(final Polyline polyline) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
 
+                    builder.setPositiveButton(mActivity.getResources().getString(R.string.clear), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            isMapFocusedRoute = false;
+                            if (line != null) {
+                                line.remove();
+                                line = null;
+                            }
+                            if (teqBuzzStopMarkers != null) {
+                                for (Marker marker : teqBuzzStopMarkers) {
+                                    marker.remove();
+                                }
+                                teqBuzzStopMarkers.clear();
+                            }
+                            selectedVehicle = null;
+                        }
+                    });
+                    builder.setMessage(mActivity.getResources().getString(R.string.polylines_clear_alert));
+                    builder.setNegativeButton(mActivity.getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                        }
+                    });
+                    builder.show();
+                }
+            });
             teqBuzzVehicles = new ArrayList<Vehicle>();
             teqBuzzFavVehicles = teqBuzzDbHelper.getFavVehicles();
             teqbuzzVehicleListAdapter = new VehicleListAdapter(this, mActivity, teqBuzzVehicles);
@@ -827,6 +864,7 @@ public class BusMapFragment extends Fragment implements AdapterView.OnItemClickL
                 webService.clearAll();
                 teqBuzzVehicles.clear();
                 teqbuzzVehicleListAdapter.notifyDataSetChanged();
+                teqbuzzVehicleListAdapter.setData(teqBuzzVehicles, filterText);
                 myPreferences = new Preferences(mActivity);
                 boolean isLoginned = myPreferences.isLoginned();
                 sharedVehicleId = ((MainActivity) mActivity).getSharedVehicle().getVehicle_id();
@@ -1090,22 +1128,6 @@ public class BusMapFragment extends Fragment implements AdapterView.OnItemClickL
             if (teqBuzzStopMarkers != null && teqBuzzStopMarkers.size() > 0) {
                 for (Marker marker : teqBuzzStopMarkers) {
                     BitmapDescriptor flagBitmapDescriptor = Utility.getCustomMarker(mActivity, schedules.get(teqBuzzStopMarkers.indexOf(marker)));
-                    /*LinearLayout etaMarkerLayout = (LinearLayout) mActivity.getLayoutInflater().inflate(R.layout.distance_marker_layout, null);
-
-                    etaMarkerLayout.setDrawingCacheEnabled(true);
-                    etaMarkerLayout.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED), View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
-                    etaMarkerLayout.layout(0, 0, etaMarkerLayout.getMeasuredWidth(), etaMarkerLayout.getMeasuredHeight());
-                    etaMarkerLayout.buildDrawingCache(true);
-
-                    TextView eta = (TextView) etaMarkerLayout.findViewById(R.id.eta);
-                    ImageView stopImage = (ImageView) etaMarkerLayout.findViewById(R.id.stop);
-                    stopImage.setImageResource(stopIcon);
-                    eta.setText(schedules.get(teqBuzzStopMarkers.indexOf(marker)).getEta() + " mins");
-
-                    Bitmap flagBitmap = Bitmap.createBitmap(etaMarkerLayout.getDrawingCache());
-                    etaMarkerLayout.setDrawingCacheEnabled(false);
-                    BitmapDescriptor flagBitmapDescriptor = BitmapDescriptorFactory.fromBitmap(flagBitmap);
-*/
                     int index = teqBuzzStopMarkers.indexOf(marker);
                     marker.setIcon(flagBitmapDescriptor);
                     teqBuzzStopMarkers.set(index, marker);
@@ -1205,8 +1227,19 @@ public class BusMapFragment extends Fragment implements AdapterView.OnItemClickL
         //super.onCreateOptionsMenu(menu, inflater);
         menu.clear();
         inflater.inflate(R.menu.menu_home, menu);
-        choiceMenuItem = menu.findItem(R.id.home);
 
+        SearchManager searchManager = (SearchManager)
+                mActivity.getSystemService(Context.SEARCH_SERVICE);
+        searchMenuItem = menu.findItem(R.id.action_search);
+        searchView = (SearchView) searchMenuItem.getActionView();
+
+        searchView.setSearchableInfo(searchManager.
+                getSearchableInfo(mActivity.getComponentName()));
+        searchView.setSubmitButtonEnabled(true);
+        searchView.setOnQueryTextListener(this);
+
+
+        choiceMenuItem = menu.findItem(R.id.home);
         sharedVehicleMenuItem = menu.findItem(R.id.actionbar_item);
         MenuItemCompat.setActionView(sharedVehicleMenuItem, R.layout.notification_update_count_layout);
         menuBadgeView = (RelativeLayout) MenuItemCompat.getActionView(sharedVehicleMenuItem);
@@ -1401,6 +1434,7 @@ public class BusMapFragment extends Fragment implements AdapterView.OnItemClickL
                 teqBuzzVehicles.clear();
             if (teqbuzzVehicleListAdapter != null)
                 teqbuzzVehicleListAdapter.notifyDataSetChanged();
+            teqbuzzVehicleListAdapter.setData(teqBuzzVehicles, filterText);
             if (myPreferences != null) {
                 if (!myPreferences.isLoginned()) {
                     onFavFilterDisabled();
@@ -2630,14 +2664,13 @@ public class BusMapFragment extends Fragment implements AdapterView.OnItemClickL
                 this.vehicleListEntity = vehicleListEntity;
                 receivedVehicles = vehicleListEntity.getVehicles();
                 vehicleListEntity.getVehicleHashMaps();
-                mainTeqbuzzVehicles.clear();
-                mainTeqbuzzVehicles.addAll(receivedVehicles);
 
 
                 if (receivedVehicles != null && receivedVehicles.size() > 0) {
-
                     hideProgressBar();
                     hideVehicleNotFoundSnack();
+                    mainTeqbuzzVehicles.clear();
+                    mainTeqbuzzVehicles.addAll(receivedVehicles);
                     // SORTING VEHICLES DISTANCE WISE
                     if (!isCmgFromDeepLink) {
                         receivedVehicles = sortDistanceWise(receivedVehicles);
@@ -2695,6 +2728,7 @@ public class BusMapFragment extends Fragment implements AdapterView.OnItemClickL
                     // No vehicle from server
                     teqBuzzVehicles.clear();
                     teqbuzzVehicleListAdapter.notifyDataSetChanged();
+                    teqbuzzVehicleListAdapter.setData(teqBuzzVehicles, filterText);
                     removeAllVehicleMarkers();
                     Log.d(TAG, "vehicle list cleared");
                     if (teqBuzzVehicles == null || teqBuzzVehicles.size() <= 0) {
@@ -2708,6 +2742,7 @@ public class BusMapFragment extends Fragment implements AdapterView.OnItemClickL
                 // No vehicle from server
                 teqBuzzVehicles.clear();
                 teqbuzzVehicleListAdapter.notifyDataSetChanged();
+                teqbuzzVehicleListAdapter.setData(teqBuzzVehicles, filterText);
                 removeAllVehicleMarkers();
                 Log.d(TAG, "vehicle list cleared");
                 showVehicleNotFoundSnack();
@@ -2801,6 +2836,7 @@ public class BusMapFragment extends Fragment implements AdapterView.OnItemClickL
             }
         }
         teqbuzzVehicleListAdapter.notifyDataSetChanged();
+        teqbuzzVehicleListAdapter.setData(teqBuzzVehicles, filterText);
         updateVehicleMarkers(receivedVehicles, teqBuzzVehicles);
         setMarkersMovementForVehicles(teqBuzzVehicles, receivedVehicles);
         if (!isSingleRun) {
@@ -2864,6 +2900,7 @@ public class BusMapFragment extends Fragment implements AdapterView.OnItemClickL
         teqbuzzVehicles.clear();
         teqBuzzVehicles.addAll(tempVehicles);
         teqbuzzVehicleListAdapter.notifyDataSetChanged();
+        teqbuzzVehicleListAdapter.setData(teqBuzzVehicles, filterText);
         return tempVehicles;
     }
 
@@ -2887,6 +2924,7 @@ public class BusMapFragment extends Fragment implements AdapterView.OnItemClickL
         }*/
 
         teqbuzzVehicleListAdapter.notifyDataSetChanged();
+        teqbuzzVehicleListAdapter.setData(teqBuzzVehicles, filterText);
         runGetVehicleService(user.getMode(), isFavouriteFlagEnabled());
     }
 
@@ -2897,8 +2935,8 @@ public class BusMapFragment extends Fragment implements AdapterView.OnItemClickL
             }
         };
         Collections.sort(teqBuzzVehicles, myComparator);
-        teqbuzzVehicleListAdapter.setData(teqBuzzVehicles);
         teqbuzzVehicleListAdapter.notifyDataSetChanged();
+        teqbuzzVehicleListAdapter.setData(teqBuzzVehicles, filterText);
 
         if (teqBuzzVehicleMarkers != null) {
             ArrayList<Marker> tempMarkers = new ArrayList<Marker>();
@@ -2928,7 +2966,7 @@ public class BusMapFragment extends Fragment implements AdapterView.OnItemClickL
                 };
                 Collections.sort(receivedVehicles, myComparator);
         /*teqbuzzVehicleListAdapter.setData(teqBuzzVehicles);
-        teqbuzzVehicleListAdapter.notifyDataSetChanged();
+        teqbuzzVehicleListAdapter.notifyDataSetChanged();teqbuzzVehicleListAdapter.setData(teqBuzzVehicles);
 */
                 if (teqBuzzVehicleMarkers != null) {
                     ArrayList<Marker> tempMarkers = new ArrayList<Marker>();
@@ -2988,7 +3026,7 @@ public class BusMapFragment extends Fragment implements AdapterView.OnItemClickL
                             /*teqBuzzVehicle.setDistance(receivedVehicle.getDistance());
                               teqBuzzVehicles.set(teqBuzzVehiclePosition, teqBuzzVehicle);
                               sortDistanceWise();
-                              teqbuzzVehicleListAdapter.notifyDataSetChanged();*/
+                              teqbuzzVehicleListAdapter.notifyDataSetChanged();teqbuzzVehicleListAdapter.setData(teqBuzzVehicles);*/
 
 
                                 /*// testing dummy movements
@@ -3070,6 +3108,7 @@ public class BusMapFragment extends Fragment implements AdapterView.OnItemClickL
                             sortDistanceWise();
                             Log.d("Sorting", "Sorted");
                             teqbuzzVehicleListAdapter.notifyDataSetChanged();
+                            teqbuzzVehicleListAdapter.setData(teqBuzzVehicles, filterText);
                         }
                     });
 
@@ -3157,7 +3196,7 @@ public class BusMapFragment extends Fragment implements AdapterView.OnItemClickL
             schedule_list.setAdapter(vehicleScheduleAdapter);
             updateScheduleListHeader(teqBuzzVehicles.get(selectedVehicleIndex), schedules);
             stop_overlay.setVisibility(View.GONE);
-            mActivity.runOnUiThread(new Runnable() {
+           /* mActivity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     new Timer().schedule(new TimerTask() {
@@ -3170,7 +3209,7 @@ public class BusMapFragment extends Fragment implements AdapterView.OnItemClickL
                         }
                     }, 2000);
                 }
-            });
+            });*/
 
         } else {
             Utility.showToast(mActivity, mActivity.getResources().getString(R.string.some_error_occured));
@@ -3197,6 +3236,7 @@ public class BusMapFragment extends Fragment implements AdapterView.OnItemClickL
         teqBuzzVehicles.set(teqBuzzVehiclePosition, teqBuzzVehicle);
         //sortDistanceWise();
         teqbuzzVehicleListAdapter.notifyDataSetChanged();
+        teqbuzzVehicleListAdapter.setData(teqBuzzVehicles, filterText);
         //nativeAdAdapter.notifyDataSetChanged();
 
     }
@@ -3257,6 +3297,7 @@ public class BusMapFragment extends Fragment implements AdapterView.OnItemClickL
         webService.clearAll();
         teqBuzzVehicles.clear();
         teqbuzzVehicleListAdapter.notifyDataSetChanged();
+        teqbuzzVehicleListAdapter.setData(teqBuzzVehicles, filterText);
         sharedVehicleId = ((MainActivity) mActivity).getSharedVehicle().getVehicle_id();
         sharedVehicle = ((MainActivity) mActivity).getSharedVehicle();
         this.isCmgFromDeepLink = isCmgFromDeepLink;
@@ -3360,11 +3401,28 @@ public class BusMapFragment extends Fragment implements AdapterView.OnItemClickL
             Utility.showSnack(mActivity, mActivity.getResources().getString(R.string.fav_removed));
         }
         teqbuzzVehicleListAdapter.notifyDataSetChanged();
+        teqbuzzVehicleListAdapter.setData(teqBuzzVehicles, filterText);
     }
 
     public void onFavVehiclesLoaded() {
         if (vehicleListAdapter != null)
             vehicleListAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        filterText = newText;
+        teqbuzzVehicleListAdapter.filter(filterText);
+        return false;
+    }
+
+    public ArrayList<Vehicle> getVehicles() {
+        return mainTeqbuzzVehicles;
     }
 
     private class ScheduleListStikkyAnimator extends HeaderStikkyAnimator {
@@ -3411,6 +3469,7 @@ public class BusMapFragment extends Fragment implements AdapterView.OnItemClickL
         teqBuzzVehicles.set(selectedVehicleIndex, teqbuzzVehicle);
         //sortDistanceWise();
         teqbuzzVehicleListAdapter.notifyDataSetChanged();
+        teqbuzzVehicleListAdapter.setData(teqBuzzVehicles, filterText);
         //nativeAdAdapter.notifyDataSetChanged();
 
     }
@@ -3460,17 +3519,20 @@ public class BusMapFragment extends Fragment implements AdapterView.OnItemClickL
 
     private void drawGoogleAPIRouteForSelectedVehicle(ArrayList<Schedule> schedules) {
 
-        /*for (int i = 0; i + 1 < schedules.size(); i++) {*/
+        //    for (int i = 0; i + 1 < schedules.size(); i++) {
+
         if (schedules != null && schedules.size() > 0) {
             LatLng origin = new LatLng(Double.parseDouble(schedules.get(0).getStop_latitude()), Double.parseDouble(schedules.get(0).getStop_longitude()));
             LatLng dest = new LatLng(Double.parseDouble(schedules.get(schedules.size() - 1).getStop_latitude()), Double.parseDouble(schedules.get(schedules.size() - 1).getStop_longitude()));
 
-            String url = Utility.getDirectionsUrl(origin, dest);
+            // String url = Utility.getDirectionsUrl(origin, dest);
+            String url = Utility.getDirectionsUrl(origin, dest, schedules);
+
 
             polyLinesDownloadTask = new DownloadTask();
 
             polyLinesDownloadTask.execute(url);
-        /*}*/
+            //      }
 
             if (teqBuzzStopMarkers != null) {
                 for (Marker marker : teqBuzzStopMarkers) {
@@ -3482,12 +3544,12 @@ public class BusMapFragment extends Fragment implements AdapterView.OnItemClickL
                 teqBuzzStopMarkers = new ArrayList<Marker>();
 
             }
-            for (int i = 0; i < schedules.size(); i++) {
+            for (int j = 0; j < schedules.size(); j++) {
 
-                BitmapDescriptor flagBitmapDescriptor = Utility.getCustomMarker(mActivity, schedules.get(i));
+                BitmapDescriptor flagBitmapDescriptor = Utility.getCustomMarker(mActivity, schedules.get(j));
 
-                LatLng position = new LatLng(Double.parseDouble(schedules.get(i).getStop_latitude()), Double.parseDouble(schedules.get(i).getStop_longitude()));
-                Marker stopMarker = addMarkerForLocation(googleMap, position.latitude, position.longitude, Constants.TEQBUZZ_STOP_MARKER + "_" + schedules.get(i).getStop_id() + "_" + schedules.get(i).getStop_name(), flagBitmapDescriptor);
+                LatLng position = new LatLng(Double.parseDouble(schedules.get(j).getStop_latitude()), Double.parseDouble(schedules.get(j).getStop_longitude()));
+                Marker stopMarker = addMarkerForLocation(googleMap, position.latitude, position.longitude, Constants.TEQBUZZ_STOP_MARKER + "_" + schedules.get(j).getStop_id() + "_" + schedules.get(j).getStop_name(), flagBitmapDescriptor);
 
                 teqBuzzStopMarkers.add(stopMarker);
             }
@@ -3597,20 +3659,26 @@ public class BusMapFragment extends Fragment implements AdapterView.OnItemClickL
                 }
 
                 // Adding all the points in the route to LineOptions
+
                 selectedBusPolyLines.addAll(points);
-                selectedBusPolyLines.width(15);
+                selectedBusPolyLines.width(20);
                 selectedBusPolyLines.color(mActivity.getResources().getColor(R.color.colorPrimary));
 
 
                 // setting route paths for vehicle
                 setRoutePathsForSelectedVehicles(points);
-
+                for (LatLng point : points) {
+                    Log.d("latlngpolyline", "latitude : " + String.valueOf(point.latitude + "longitude : " + String.valueOf(point.longitude)));
+                }
+                Log.d("latlngpolyline", ".........................................................................................................");
 
             }
 
             // Drawing polyline in the Google Map for the i-th route
             if (googleMap != null && selectedBusPolyLines != null && !isMapFocusedRoute) {
                 line = googleMap.addPolyline(selectedBusPolyLines);
+
+                line.setClickable(true);
                 Log.d("Polyline in google map", line.toString());
             } else
                 initialiseGoogleMap();
@@ -3637,6 +3705,7 @@ public class BusMapFragment extends Fragment implements AdapterView.OnItemClickL
         teqBuzzVehicles.set(selectedVehicleIndex, teqbuzzVehicle);
         //sortDistanceWise();
         teqbuzzVehicleListAdapter.notifyDataSetChanged();
+        teqbuzzVehicleListAdapter.setData(teqBuzzVehicles, filterText);
         //nativeAdAdapter.notifyDataSetChanged();
 
     }
@@ -3988,6 +4057,7 @@ public class BusMapFragment extends Fragment implements AdapterView.OnItemClickL
             teqBuzzVehicles.set(teqBuzzVehiclePosition, receivedVehicle);
             //sortDistanceWise();
             teqbuzzVehicleListAdapter.notifyDataSetChanged();
+            teqbuzzVehicleListAdapter.setData(teqBuzzVehicles, filterText);
             //nativeAdAdapter.notifyDataSetChanged();
         } catch (IndexOutOfBoundsException e) {
             Log.e("onTeqbuzzVehicleAnimationProgress", "vehicle size mismatch error");
@@ -4009,6 +4079,7 @@ public class BusMapFragment extends Fragment implements AdapterView.OnItemClickL
             teqBuzzVehicles.set(teqBuzzVehiclePosition, teqBuzzVehicle);
             //sortDistanceWise();
             teqbuzzVehicleListAdapter.notifyDataSetChanged();
+            teqbuzzVehicleListAdapter.setData(teqBuzzVehicles, filterText);
             //nativeAdAdapter.notifyDataSetChanged();
         } catch (IndexOutOfBoundsException e) {
             Log.e("onTeqbuzzVehicleAnimatedCompleted", "vehicle size mismatch error");

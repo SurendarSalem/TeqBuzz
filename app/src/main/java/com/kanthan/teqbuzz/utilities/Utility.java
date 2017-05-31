@@ -697,6 +697,63 @@ public class Utility {
         }
         return receivedVehicles;
     }
+
+    public static String getDirectionsUrl(LatLng origin, LatLng dest, ArrayList<Schedule> schedules) {
+
+/*
+        // Origin of route
+        String str_origin = "origin=" + origin.latitude + "," + origin.longitude;
+
+        // Destination of route
+        String str_dest = "destination=" + dest.latitude + "," + dest.longitude;
+
+        // Sensor enabled
+        String sensor = "sensor=false";
+        String mode = "mode=driving";
+
+        // Building the parameters to the web service
+        String parameters = str_origin + "&" + str_dest + "&" + sensor + "&" + mode;
+
+        // Output format
+        String output = "json";
+
+        String url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters;
+*/
+
+
+// Origin of route
+        String str_origin = "origin=" + origin.latitude + "," + origin.longitude;
+
+        // Destination of route
+        String str_dest = "destination=" + dest.latitude + "," + dest.longitude;
+
+        // Sensor enabled
+        String sensor = "sensor=false";
+
+        // Waypoints
+        String waypoints = "";
+        for (int i = 1; i < schedules.size(); i++) {
+            Double lat = Double.parseDouble(schedules.get(i).getStop_latitude());
+            Double lon = Double.parseDouble(schedules.get(i).getStop_longitude());
+
+            LatLng point = new LatLng(lat, lon);
+            if (i == 1)
+                waypoints = "waypoints=";
+            waypoints += point.latitude + "," + point.longitude + "|";
+        }
+
+        // Building the parameters to the web service
+        String parameters = str_origin + "&" + str_dest + "&" + sensor + "&" + waypoints;
+
+        // Output format
+        String output = "json";
+
+        // Building the url to the web service
+        String url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters;
+
+
+        return url;
+    }
 }
 
 
