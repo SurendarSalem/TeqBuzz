@@ -750,6 +750,7 @@ public class Utility {
 
         // Building the url to the web service
         String url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters;
+        url += "&key=AIzaSyAG3fli00W66PyNEhCLcX3MMj9RGjmDgQA";
 
 
         return url;

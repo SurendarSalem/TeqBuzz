@@ -821,7 +821,7 @@ public class BusMapFragment extends Fragment implements AdapterView.OnItemClickL
             setCustomMarkersInMap();
             moveMapCameraToLastUsedLocation();
             initialiseUserMarker();
-            googleMap.setOnPolylineClickListener(new GoogleMap.OnPolylineClickListener() {
+            /*googleMap.setOnPolylineClickListener(new GoogleMap.OnPolylineClickListener() {
                 @Override
                 public void onPolylineClick(final Polyline polyline) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
@@ -852,7 +852,26 @@ public class BusMapFragment extends Fragment implements AdapterView.OnItemClickL
                     });
                     builder.show();
                 }
+            });*/
+
+            googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+                @Override
+                public void onMapClick(LatLng latLng) {
+                    isMapFocusedRoute = false;
+                    if (line != null) {
+                        line.remove();
+                        line = null;
+                    }
+                    if (teqBuzzStopMarkers != null) {
+                        for (Marker marker : teqBuzzStopMarkers) {
+                            marker.remove();
+                        }
+                        teqBuzzStopMarkers.clear();
+                    }
+                    selectedVehicle = null;
+                }
             });
+
             teqBuzzVehicles = new ArrayList<Vehicle>();
             teqBuzzFavVehicles = teqBuzzDbHelper.getFavVehicles();
             teqbuzzVehicleListAdapter = new VehicleListAdapter(this, mActivity, teqBuzzVehicles);
@@ -1868,11 +1887,7 @@ public class BusMapFragment extends Fragment implements AdapterView.OnItemClickL
 
     }
 
-    private void updateVehicleMarkers(ArrayList<Vehicle> receivedVehicles, ArrayList<Vehicle> teqbuzzVehicles) {
-        if (teqBuzzVehicleMarkers.size() == teqbuzzVehicles.size()) {
-        } else if (teqBuzzVehicleMarkers.size() == teqbuzzVehicles.size()) {
-        } else if (teqBuzzVehicleMarkers.size() == teqbuzzVehicles.size()) {
-        }
+    public void updateVehicleMarkers(ArrayList<Vehicle> receivedVehicles, ArrayList<Vehicle> teqbuzzVehicles) {
 
         ArrayList<Marker> tempMarkers = new ArrayList<Marker>();
         // remove markers
@@ -1905,6 +1920,24 @@ public class BusMapFragment extends Fragment implements AdapterView.OnItemClickL
         }*/
 
 
+    }
+
+    public void updateVehicleMarkers1(ArrayList<Vehicle> receivedVehicles, ArrayList<Vehicle> teqbuzzVehicles) {
+        ArrayList<Marker> tempMarkers = new ArrayList<Marker>();
+        for (String vehicleId : removedVehicleIds) {
+            for (Marker marker : teqBuzzVehicleMarkers) {
+                String markerVehicleId = marker.getTitle().replace("teqbuzz_marker_", "");
+                if (vehicleId.equalsIgnoreCase(markerVehicleId)) {
+                    tempMarkers.add(marker);
+                    marker.remove();
+                }
+            }
+        }
+
+        teqBuzzVehicleMarkers.removeAll(tempMarkers);
+
+        for (String vehicleId : addedVehicleIds) {
+        }
     }
 
     private Vehicle getVehicleById(String newId, ArrayList<Vehicle> receivedVehicles) {
@@ -2662,6 +2695,7 @@ public class BusMapFragment extends Fragment implements AdapterView.OnItemClickL
             hideVehicleLoadingView();
             if (vehicleListEntity != null) {
                 this.vehicleListEntity = vehicleListEntity;
+                // Vehicle received from server
                 receivedVehicles = vehicleListEntity.getVehicles();
                 vehicleListEntity.getVehicleHashMaps();
 
@@ -2681,7 +2715,7 @@ public class BusMapFragment extends Fragment implements AdapterView.OnItemClickL
                         teqBuzzVehicleMarkers = removeNonFavMarkers(receivedVehicles);
                         hideProgressBar();
                     }
-                    if (receivedVehicles != null/* && (receivedVehicles.size() == teqBuzzVehicles.size())*/) {
+                    /*if (receivedVehicles != null*//* && (receivedVehicles.size() == teqBuzzVehicles.size())*//*) {
                         if (receivedVehicles != null && receivedVehicles.size() > 0 && teqBuzzVehicles != null && teqBuzzVehicles.size() > 0) {
                             try {
                                 receivedVehicles = Utility.setDummyMovements(receivedVehicles, teqBuzzVehicles);
@@ -2692,7 +2726,7 @@ public class BusMapFragment extends Fragment implements AdapterView.OnItemClickL
                         for (Vehicle vehicle : receivedVehicles) {
                             Log.d("VehicleLocations", "Vehicle id " + vehicle.getVehicle_line_number() + " " + " lat is " + vehicle.getLatitude() + " lon is " + vehicle.getLongitude());
                         }
-                    }
+                    }*/
 
                     checkNewlyAddedAndRemovedVehicles(receivedVehicles);
 
@@ -2837,7 +2871,10 @@ public class BusMapFragment extends Fragment implements AdapterView.OnItemClickL
         }
         teqbuzzVehicleListAdapter.notifyDataSetChanged();
         teqbuzzVehicleListAdapter.setData(teqBuzzVehicles, filterText);
-        updateVehicleMarkers(receivedVehicles, teqBuzzVehicles);
+        //updateVehicleMarkers(receivedVehicles, teqBuzzVehicles);
+
+        updateVehicleMarkers1(receivedVehicles, teqBuzzVehicles);
+
         setMarkersMovementForVehicles(teqBuzzVehicles, receivedVehicles);
         if (!isSingleRun) {
             runGetVehicleService(user.getMode(), isFavouriteFlagEnabled());
@@ -3682,15 +3719,16 @@ public class BusMapFragment extends Fragment implements AdapterView.OnItemClickL
                 Log.d("Polyline in google map", line.toString());
             } else
                 initialiseGoogleMap();
-
-            Location location = new Location("");
-            location.setLatitude(points.get(0).latitude);
-            location.setLongitude(points.get(0).longitude);
-            if (!isMapFocusedRoute) {
-                moveMapCameraToPosition(location);
-                isMapFocusedRoute = true;
+            if (points.size() > 0) {
+                Location location = new Location("");
+                location.setLatitude(points.get(0).latitude);
+                location.setLongitude(points.get(0).longitude);
+                if (!isMapFocusedRoute) {
+                    moveMapCameraToPosition(location);
+                    isMapFocusedRoute = true;
+                }
+            } else {
             }
-
             //googleMap.addPolyline(polylineOptions);
 
             stopProgress();
