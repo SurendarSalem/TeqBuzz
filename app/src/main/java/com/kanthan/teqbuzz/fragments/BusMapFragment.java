@@ -297,6 +297,7 @@ public class BusMapFragment extends Fragment implements AdapterView.OnItemClickL
     private MenuItem searchMenuItem;
     private SearchView searchView;
     private String filterText = "";
+    private boolean isRouteShown;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -606,6 +607,7 @@ public class BusMapFragment extends Fragment implements AdapterView.OnItemClickL
         addAsFav.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                showProgress();
                 selectedVehicleIndex = clickedVehicleIndex;
                 selectedVehicle = teqBuzzVehicles.get(selectedVehicleIndex);
                 vehicleOptionDialog.dismiss();
@@ -868,7 +870,16 @@ public class BusMapFragment extends Fragment implements AdapterView.OnItemClickL
                         }
                         teqBuzzStopMarkers.clear();
                     }
+                    if (isRouteShown) {
+                        for (Marker marker : teqBuzzVehicleMarkers) {
+                            addMarkerForTeqBuzzVehicle(getVehicleFromId(getMarkerTitleFromMarker(marker)));
+                        }
+                    }
+
+                    isRouteShown = false;
                     selectedVehicle = null;
+
+
                 }
             });
 
@@ -1111,9 +1122,11 @@ public class BusMapFragment extends Fragment implements AdapterView.OnItemClickL
                     String snippet = marker.getSnippet();
 
                 } else if (markerTitle.contains(Constants.TEQBUZZ_MARKER)) {
-                    clickedVehicleIndex = teqBuzzVehicleMarkers.indexOf(marker);
+                    String clickedMarkerId = getMarkerTitleFromMarker(marker);
+                    Vehicle clickedVehicle = getVehicleFromId(clickedMarkerId);
+                    clickedVehicleIndex = teqBuzzVehicles.indexOf(clickedVehicle);
                     progress_container.setVisibility(View.VISIBLE);
-                    if (teqBuzzDbHelper.isVehicleFav(teqBuzzVehicles.get(selectedVehicleIndex))) {
+                    if (selectedVehicle.isFavourite()) {
                         isFavText.setText("Remove from Fav");
                     } else {
                         isFavText.setText("Add as Fav");
@@ -1122,6 +1135,15 @@ public class BusMapFragment extends Fragment implements AdapterView.OnItemClickL
                 }
             }
         });
+    }
+
+    private Vehicle getVehicleFromId(String clickedMarkerId) {
+        for (Vehicle vehicle : teqBuzzVehicles) {
+            if (clickedMarkerId.equalsIgnoreCase(vehicle.getVehicle_id())) {
+                return vehicle;
+            }
+        }
+        return null;
     }
 
     private void setTeqBuzzStopMarkersBasedOnZoom(float tempZoomLevel) {
@@ -1891,33 +1913,70 @@ public class BusMapFragment extends Fragment implements AdapterView.OnItemClickL
 
         ArrayList<Marker> tempMarkers = new ArrayList<Marker>();
         // remove markers
-        for (Vehicle vehicle : teqbuzzVehicles) {
-            for (Marker marker : teqBuzzVehicleMarkers) {
+        for (Marker marker : teqBuzzVehicleMarkers) {
+            int i = 0;
+            for (Vehicle vehicle : teqbuzzVehicles) {
                 String listVehicleId = vehicle.getVehicle_id();
                 String markerVehicleId = marker.getTitle().replace("teqbuzz_marker_", "");
                 if (listVehicleId.equalsIgnoreCase(markerVehicleId)) {
-                    tempMarkers.add(marker);
-                } else {
 
+                } else {
+                    i++;
+                    if (i >= teqbuzzVehicles.size()) {
+                        tempMarkers.add(marker);
+                    }
                 }
             }
         }
         //teqBuzzVehicleMarkers.clear();
         teqBuzzVehicleMarkers.removeAll(tempMarkers);
-        for (Marker marker : teqBuzzVehicleMarkers) {
+        for (Marker marker : tempMarkers) {
             marker.remove();
         }
-        teqBuzzVehicleMarkers.addAll(tempMarkers);
+        // teqBuzzVehicleMarkers.clear();
+        //teqBuzzVehicleMarkers.addAll(tempMarkers);
 
 
-     /*   for (String newId : removedVehicleIds) {
+        ArrayList<Vehicle> tempVehicles = new ArrayList<Vehicle>();
+        // remove markers
+
+        for (Vehicle vehicle : teqbuzzVehicles) {
+            int i = 0;
             for (Marker marker : teqBuzzVehicleMarkers) {
+
+                String listVehicleId = vehicle.getVehicle_id();
                 String markerVehicleId = marker.getTitle().replace("teqbuzz_marker_", "");
-                if (markerVehicleId.equalsIgnoreCase(newId)) {
-                    Vehicle vehicle = getVehicleById(newId, receivedVehicles);
+                Log.d("checkingupdatemarkers", listVehicleId + " " + markerVehicleId);
+                if (listVehicleId.equalsIgnoreCase(markerVehicleId)) {
+
+                } else {
+                    i++;
+                    if (i >= teqBuzzVehicleMarkers.size()) {
+                        tempVehicles.add(vehicle);
+                    }
                 }
             }
-        }*/
+        }
+
+
+        Log.d("", "" + tempVehicles.size());
+        if (tempVehicles != null && tempVehicles.size() > 0) {
+            for (Vehicle vehicle : tempVehicles) {
+                Marker teqBuzzMarker = addMarkerForTeqBuzzVehicle(vehicle);
+                teqBuzzVehicleMarkers.add(teqBuzzMarker);
+                teqBuzzVehicleMarkerHash.put(vehicle.getVehicle_id(), teqBuzzMarker);
+            }
+        }
+
+        if (isRouteShown) {
+            for (Marker marker : teqBuzzVehicleMarkers) {
+                String vehicleId = selectedVehicle.getVehicle_id();
+                String markerVehicleId = getMarkerTitleFromMarker(marker);
+                if (!vehicleId.equalsIgnoreCase(markerVehicleId)) {
+                    marker.remove();
+                }
+            }
+        }
 
 
     }
@@ -2518,10 +2577,10 @@ public class BusMapFragment extends Fragment implements AdapterView.OnItemClickL
     }
 
     private Marker addMarkerForTeqBuzzVehicle(Vehicle vehicle) {
-        MarkerOptions schedulesMarkerOptions = new MarkerOptions().position(
+        MarkerOptions markerOptions = new MarkerOptions().position(
                 new LatLng(Double.parseDouble(vehicle.getLatitude()), Double.parseDouble(vehicle.getLongitude())))
                 .title(Constants.TEQBUZZ_MARKER + "_" + vehicle.getVehicle_id()).icon(vehicle_marker);
-        Marker marker = googleMap.addMarker(schedulesMarkerOptions);
+        Marker marker = googleMap.addMarker(markerOptions);
         marker.setTag(vehicle);
         return marker;
     }
@@ -2703,8 +2762,6 @@ public class BusMapFragment extends Fragment implements AdapterView.OnItemClickL
                 if (receivedVehicles != null && receivedVehicles.size() > 0) {
                     hideProgressBar();
                     hideVehicleNotFoundSnack();
-                    mainTeqbuzzVehicles.clear();
-                    mainTeqbuzzVehicles.addAll(receivedVehicles);
                     // SORTING VEHICLES DISTANCE WISE
                     if (!isCmgFromDeepLink) {
                         receivedVehicles = sortDistanceWise(receivedVehicles);
@@ -2715,6 +2772,10 @@ public class BusMapFragment extends Fragment implements AdapterView.OnItemClickL
                         teqBuzzVehicleMarkers = removeNonFavMarkers(receivedVehicles);
                         hideProgressBar();
                     }
+
+                    mainTeqbuzzVehicles.clear();
+                    mainTeqbuzzVehicles.addAll(receivedVehicles);
+
                     /*if (receivedVehicles != null*//* && (receivedVehicles.size() == teqBuzzVehicles.size())*//*) {
                         if (receivedVehicles != null && receivedVehicles.size() > 0 && teqBuzzVehicles != null && teqBuzzVehicles.size() > 0) {
                             try {
@@ -2744,6 +2805,7 @@ public class BusMapFragment extends Fragment implements AdapterView.OnItemClickL
                         }
                     } else {
                         addTeqBuzzMarkersForVehicles(receivedVehicles);
+                        runGetVehicleService(user.getMode(), isFavouriteFlagEnabled());
                     }
                     isErrorOccured = false;
                     //adding missing markers
@@ -2871,9 +2933,9 @@ public class BusMapFragment extends Fragment implements AdapterView.OnItemClickL
         }
         teqbuzzVehicleListAdapter.notifyDataSetChanged();
         teqbuzzVehicleListAdapter.setData(teqBuzzVehicles, filterText);
-        //updateVehicleMarkers(receivedVehicles, teqBuzzVehicles);
+        updateVehicleMarkers(receivedVehicles, teqBuzzVehicles);
 
-        updateVehicleMarkers1(receivedVehicles, teqBuzzVehicles);
+        //updateVehicleMarkers1(receivedVehicles, teqBuzzVehicles);
 
         setMarkersMovementForVehicles(teqBuzzVehicles, receivedVehicles);
         if (!isSingleRun) {
@@ -2948,7 +3010,9 @@ public class BusMapFragment extends Fragment implements AdapterView.OnItemClickL
         if (!isSharedVehicleModeEnabled)
             sortDistanceWise();
         //nativeAdAdapter.notifyDataSetChanged();
-        teqBuzzVehicleMarkers = new ArrayList<Marker>();
+        if (teqBuzzVehicleMarkers == null) {
+            teqBuzzVehicleMarkers = new ArrayList<Marker>();
+        }
         teqBuzzVehicleMarkerHash = new HashMap<String, Marker>();
         for (Vehicle vehicle : teqBuzzVehicles) {
             Marker teqBuzzMarker = addMarkerForTeqBuzzVehicle(vehicle);
@@ -2962,7 +3026,7 @@ public class BusMapFragment extends Fragment implements AdapterView.OnItemClickL
 
         teqbuzzVehicleListAdapter.notifyDataSetChanged();
         teqbuzzVehicleListAdapter.setData(teqBuzzVehicles, filterText);
-        runGetVehicleService(user.getMode(), isFavouriteFlagEnabled());
+        /*runGetVehicleService(user.getMode(), isFavouriteFlagEnabled());*/
     }
 
     private ArrayList<Vehicle> sortDistanceWise() {
@@ -2975,7 +3039,7 @@ public class BusMapFragment extends Fragment implements AdapterView.OnItemClickL
         teqbuzzVehicleListAdapter.notifyDataSetChanged();
         teqbuzzVehicleListAdapter.setData(teqBuzzVehicles, filterText);
 
-        if (teqBuzzVehicleMarkers != null) {
+        /*if (teqBuzzVehicleMarkers != null) {
             ArrayList<Marker> tempMarkers = new ArrayList<Marker>();
             for (Vehicle vehicle : teqBuzzVehicles) {
                 for (Marker marker : teqBuzzVehicleMarkers) {
@@ -2986,7 +3050,7 @@ public class BusMapFragment extends Fragment implements AdapterView.OnItemClickL
             }
             teqBuzzVehicleMarkers.clear();
             teqBuzzVehicleMarkers.addAll(tempMarkers);
-        }
+        }*/
 
         return teqBuzzVehicles;
     }
@@ -3005,7 +3069,7 @@ public class BusMapFragment extends Fragment implements AdapterView.OnItemClickL
         /*teqbuzzVehicleListAdapter.setData(teqBuzzVehicles);
         teqbuzzVehicleListAdapter.notifyDataSetChanged();teqbuzzVehicleListAdapter.setData(teqBuzzVehicles);
 */
-                if (teqBuzzVehicleMarkers != null) {
+              /*  if (teqBuzzVehicleMarkers != null) {
                     ArrayList<Marker> tempMarkers = new ArrayList<Marker>();
                     for (Vehicle vehicle : receivedVehicles) {
                         for (Marker marker : teqBuzzVehicleMarkers) {
@@ -3016,7 +3080,7 @@ public class BusMapFragment extends Fragment implements AdapterView.OnItemClickL
                     }
                     teqBuzzVehicleMarkers.clear();
                     teqBuzzVehicleMarkers.addAll(tempMarkers);
-                }
+                }*/
 
             }
         });
@@ -3428,6 +3492,7 @@ public class BusMapFragment extends Fragment implements AdapterView.OnItemClickL
 
     public void onVehicleFavOptionDone(String favFlag, Vehicle vehicle) {
         hideProgressBar();
+        stopProgress();
         if (favFlag.equalsIgnoreCase(Vehicle.IS_FAV)) {
             long isAdded = teqBuzzDbHelper.addVehicleToFavList(vehicle);
             vehicle.setFavourite(true);
@@ -3435,10 +3500,35 @@ public class BusMapFragment extends Fragment implements AdapterView.OnItemClickL
         } else if (favFlag.equalsIgnoreCase(Vehicle.IS_NOT_FAV)) {
             teqBuzzDbHelper.deleteVehicleFromFavList(selectedVehicle);
             vehicle.setFavourite(false);
+            teqbuzzVehicleListAdapter.notifyDataSetChanged();
+            teqbuzzVehicleListAdapter.setData(teqBuzzVehicles, filterText);
+            if (isFavouriteFlagEnabled()) {
+                teqBuzzVehicles.remove(vehicle);
+                removeVehicleMarker(vehicle);
+            }
             Utility.showSnack(mActivity, mActivity.getResources().getString(R.string.fav_removed));
         }
         teqbuzzVehicleListAdapter.notifyDataSetChanged();
         teqbuzzVehicleListAdapter.setData(teqBuzzVehicles, filterText);
+    }
+
+    private void removeVehicleMarker(Vehicle vehicle) {
+        String vehicleId = vehicle.getVehicle_id();
+        Marker marker = getMarkerFromId(vehicle);
+        if (marker != null) {
+            marker.remove();
+        }
+        teqBuzzVehicleMarkers.remove(marker);
+    }
+
+    private Marker getMarkerFromId(Vehicle vehicle) {
+        for (Marker marker : teqBuzzVehicleMarkers) {
+            String markerId = getMarkerTitleFromMarker(marker);
+            if (vehicle.getVehicle_id().equalsIgnoreCase(markerId)) {
+                return marker;
+            }
+        }
+        return null;
     }
 
     public void onFavVehiclesLoaded() {
@@ -3714,7 +3804,7 @@ public class BusMapFragment extends Fragment implements AdapterView.OnItemClickL
             // Drawing polyline in the Google Map for the i-th route
             if (googleMap != null && selectedBusPolyLines != null && !isMapFocusedRoute) {
                 line = googleMap.addPolyline(selectedBusPolyLines);
-
+                isRouteShown = true;
                 line.setClickable(true);
                 Log.d("Polyline in google map", line.toString());
             } else
@@ -4199,5 +4289,9 @@ public class BusMapFragment extends Fragment implements AdapterView.OnItemClickL
 
     public boolean isSharedVehicleModeEnabled() {
         return isSharedVehicleModeEnabled;
+    }
+
+    public String getMarkerTitleFromMarker(Marker marker) {
+        return marker.getTitle().replace("teqbuzz_marker_", "");
     }
 }

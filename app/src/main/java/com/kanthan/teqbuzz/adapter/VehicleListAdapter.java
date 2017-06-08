@@ -150,7 +150,7 @@ public class VehicleListAdapter extends BaseAdapter {
     public void setData(ArrayList<Vehicle> teqBuzzVehicles, String filterText) {
         this.vehicles = teqBuzzVehicles;
         mainVehicles.clear();
-        mainVehicles.addAll(teqBuzzVehicles);
+        mainVehicles.addAll(busMapFragment.getVehicles());
         filter(filterText);
     }
 
@@ -167,6 +167,9 @@ public class VehicleListAdapter extends BaseAdapter {
             }
         }
         notifyDataSetChanged();
+        if (vehicles.size() > 0) {
+            busMapFragment.updateVehicleMarkers(null, vehicles);
+        }
     }
 
     public static class Holder {
