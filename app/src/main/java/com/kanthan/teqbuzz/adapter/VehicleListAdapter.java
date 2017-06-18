@@ -151,7 +151,11 @@ public class VehicleListAdapter extends BaseAdapter {
         this.vehicles = teqBuzzVehicles;
         mainVehicles.clear();
         mainVehicles.addAll(busMapFragment.getVehicles());
-        filter(filterText);
+        if (!filterText.equalsIgnoreCase("-1")) {
+            filter(filterText);
+        } else {
+            notifyDataSetChanged();
+        }
     }
 
     public void filter(String charText) {
